@@ -1,0 +1,13 @@
+CXXFLAGS += -Wall -Werror -ansi -std=gnu++0x -ggdb
+
+SRC_TREE[] =
+	$(removeprefix $(absname src), $(subdirs src))
+
+foreach(d, $(SRC_TREE))
+	vmount(-fl, $(absname src/$(d)), $(absname debug/$(d)))
+
+.SUBDIRS: debug
+
+.PHONY: clean
+clean:
+	rm $(filter-proper-targets $(ls R, .))
