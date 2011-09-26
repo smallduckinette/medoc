@@ -1,0 +1,10 @@
+LDFLAGS += $(shell sane-config --ldflags) $(shell sane-config --libs)
+LIBS[] +=
+	../lib/libsanepp
+
+FILES[] =
+	$(removesuffix $(glob *.cpp))
+
+CXXProgram(../bin/saneppclient, $(FILES))
+
+.DEFAULT: ../bin/saneppclient$(EXE)

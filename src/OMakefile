@@ -1,1 +1,1 @@
-.SUBDIRS:sanepp
+.SUBDIRS:sanepp saneppclient
