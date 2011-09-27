@@ -1,0 +1,8 @@
+LDFLAGS += $(shell wx-config --libs)
+
+FILES[] =
+	$(removesuffix $(glob *.cpp))
+
+CXXProgram(../bin/medoc, $(FILES))
+
+.DEFAULT: ../bin/medoc$(EXE)

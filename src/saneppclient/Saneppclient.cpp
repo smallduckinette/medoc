@@ -9,7 +9,7 @@ int main()
   std::vector<std::shared_ptr<sanepp::Device> > devices = sanepp.listDevices();
   for(const std::shared_ptr<sanepp::Device> & device : devices)
   {
-    std::cout << device << std::endl;
+    std::cout << *device << std::endl;
   }
 
   return 0;
