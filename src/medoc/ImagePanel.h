@@ -9,9 +9,7 @@ public:
   ImagePanel(wxWindow * parent, const wxImage & image);
   
 protected:
-  void onPaint(wxPaintEvent &);
-
-  DECLARE_EVENT_TABLE();
+  void OnDraw(wxDC & dc);
 
 private:
   wxBitmap m_image;
