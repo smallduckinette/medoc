@@ -11,6 +11,8 @@ IMPLEMENT_APP(App);
 
 bool App::OnInit()
 {
+  wxInitAllImageHandlers();
+  
   SetTopWindow(new Frame());
   
   return true;
