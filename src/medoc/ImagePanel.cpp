@@ -8,6 +8,12 @@ ImagePanel::ImagePanel(wxWindow * parent, const wxImage & image):
   SetScrollRate(10, 10);
 }
 
+void ImagePanel::setImage(const wxImage & image)
+{
+  m_image = wxBitmap(image);
+  Refresh();
+}
+
 void ImagePanel::OnDraw(wxDC & dc)
 {
   dc.DrawBitmap(m_image, 0, 0, false);

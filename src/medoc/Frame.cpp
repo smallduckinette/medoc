@@ -1,10 +1,13 @@
 #include "Frame.h"
 
 #include "ImagePanel.h"
+#include "PageInfo.h"
 
 
 BEGIN_EVENT_TABLE(Frame, wxFrame)
   EVT_MENU(ID_FILE_QUIT, Frame::onQuit)
+  EVT_MENU(ID_IMPORT_FILE, Frame::onImportFile)
+  EVT_LISTBOX(ID_IMAGE_LIST, Frame::onImageSelected)
 END_EVENT_TABLE()
 
 
@@ -13,21 +16,34 @@ Frame::Frame():
           wxID_ANY,
           _("Medoc"), 
           wxDefaultPosition,
-          wxSize(800, 600))
+          wxSize(800, 600)),
+  m_imageList(new wxListBox(this, ID_IMAGE_LIST)),
+  m_imagePanel(new ImagePanel(this, wxImage(_("Diagram.png"))))
 {
   // Menus
   wxMenu * menuFile = new wxMenu;
   menuFile->Append(ID_FILE_QUIT, _("E&xit"));
-
+  
+  wxMenu * menuImport = new wxMenu;
+  menuImport->Append(ID_IMPORT_FILE, _("From &file..."));
+  menuImport->Append(ID_IMPORT_SCANNER, _("From &device..."));
+  
+  wxMenu * menuExport = new wxMenu;
+  menuExport->Append(ID_EXPORT_FILE, _("To &file..."));
+  menuExport->Append(ID_EXPORT_DB, _("To &database..."));
+  
   wxMenuBar * menuBar = new wxMenuBar;
   menuBar->Append(menuFile, _("&File"));
+  menuBar->Append(menuImport, _("&Import"));
+  menuBar->Append(menuExport, _("&Export"));
 
   SetMenuBar(menuBar);
-
+  
   // Frame
   wxBoxSizer * sizer = new wxBoxSizer(wxHORIZONTAL);
-  ImagePanel * imagePanel = new ImagePanel(this, wxImage(_("P1010568.JPG")));
-  sizer->Add(imagePanel, 1, wxEXPAND);
+  m_imagePanel->setImage(wxImage(_("P1010568.JPG")));
+  sizer->Add(m_imageList, 0, wxEXPAND);
+  sizer->Add(m_imagePanel, 1, wxEXPAND);
 
   // Show
   SetSizer(sizer);
@@ -37,4 +53,31 @@ Frame::Frame():
 void Frame::onQuit(wxCommandEvent &)
 {
   Close();
+}
+
+void Frame::onImportFile(wxCommandEvent &)
+{
+  wxFileDialog fileDialog(this,
+                          _("Import file..."),
+                          _(""),
+                          _(""),
+                          _("Image files (*.jpg;*.bmp;*.png)|*.jpg;*.JPG;*.bmp;*.BMP;*.png;*.PNG|All files (*.*)|*.*"),
+                          wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_MULTIPLE);
+  if(fileDialog.ShowModal() == wxID_OK)
+  {
+    wxArrayString names;
+    wxArrayString paths;
+    fileDialog.GetFilenames(names);
+    fileDialog.GetPaths(paths);
+    assert(names.GetCount() == paths.GetCount());
+    for(size_t i = 0; i < names.GetCount(); ++i)
+    {
+      m_imageList->Append(names.Item(i), new PageInfo(paths.Item(i)));
+    }
+  }
+}
+
+void Frame::onImageSelected(wxCommandEvent & event)
+{
+  m_imagePanel->setImage(static_cast<PageInfo *>(event.GetClientObject())->getImage());
 }

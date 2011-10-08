@@ -3,6 +3,8 @@
 
 #include <wx/wx.h>
 
+class ImagePanel;
+
 class Frame : public wxFrame
 {
 public:
@@ -11,12 +13,23 @@ public:
 protected:
   enum
     {
-      ID_FILE_QUIT = wxID_HIGHEST + 1
+      ID_FILE_QUIT = wxID_HIGHEST + 1,
+      ID_IMPORT_FILE,
+      ID_IMPORT_SCANNER,
+      ID_EXPORT_FILE,
+      ID_EXPORT_DB,
+      ID_IMAGE_LIST
     };
-
+  
   void onQuit(wxCommandEvent &);
-
+  void onImportFile(wxCommandEvent &);
+  void onImageSelected(wxCommandEvent & event);
+  
   DECLARE_EVENT_TABLE();
+
+private:
+  wxListBox * m_imageList;
+  ImagePanel * m_imagePanel;
 };
 
 #endif

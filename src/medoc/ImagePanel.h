@@ -8,6 +8,8 @@ class ImagePanel : public wxScrolledWindow
 public:
   ImagePanel(wxWindow * parent, const wxImage & image);
   
+  void setImage(const wxImage & image);
+
 protected:
   void OnDraw(wxDC & dc);
 
