@@ -15,7 +15,7 @@ protected:
     {
       ID_FILE_QUIT = wxID_HIGHEST + 1,
       ID_IMPORT_FILE,
-      ID_IMPORT_SCANNER,
+      ID_IMPORT_DEVICE,
       ID_EXPORT_FILE,
       ID_EXPORT_DB,
       ID_IMAGE_LIST
@@ -23,6 +23,8 @@ protected:
   
   void onQuit(wxCommandEvent &);
   void onImportFile(wxCommandEvent &);
+  void onImportDevice(wxCommandEvent &);
+
   void onImageSelected(wxCommandEvent & event);
   
   DECLARE_EVENT_TABLE();

@@ -2,11 +2,13 @@
 
 #include "ImagePanel.h"
 #include "PageInfo.h"
+#include "ScannerDlg.h"
 
 
 BEGIN_EVENT_TABLE(Frame, wxFrame)
   EVT_MENU(ID_FILE_QUIT, Frame::onQuit)
   EVT_MENU(ID_IMPORT_FILE, Frame::onImportFile)
+  EVT_MENU(ID_IMPORT_DEVICE, Frame::onImportDevice)
   EVT_LISTBOX(ID_IMAGE_LIST, Frame::onImageSelected)
 END_EVENT_TABLE()
 
@@ -26,7 +28,7 @@ Frame::Frame():
   
   wxMenu * menuImport = new wxMenu;
   menuImport->Append(ID_IMPORT_FILE, _("From &file..."));
-  menuImport->Append(ID_IMPORT_SCANNER, _("From &device..."));
+  menuImport->Append(ID_IMPORT_DEVICE, _("From &device..."));
   
   wxMenu * menuExport = new wxMenu;
   menuExport->Append(ID_EXPORT_FILE, _("To &file..."));
@@ -75,6 +77,12 @@ void Frame::onImportFile(wxCommandEvent &)
       m_imageList->Append(names.Item(i), new PageInfo(paths.Item(i)));
     }
   }
+}
+
+void Frame::onImportDevice(wxCommandEvent &)
+{
+  ScannerDlg scannerDlg(this);
+  scannerDlg.ShowModal();
 }
 
 void Frame::onImageSelected(wxCommandEvent & event)
