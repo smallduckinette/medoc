@@ -1,6 +1,9 @@
 #include "ScannerDlg.h"
 
 #include <stdexcept>
+#include <algorithm>
+#include "ScannerOptionFactory.h"
+#include "ScannerOption.h"
 
 namespace
 {
@@ -33,14 +36,23 @@ ScannerDlg::ScannerDlg(wxWindow * parent):
     checkStatus(sane_open((*device_list)->name, &m_handle));
     
     int nbOptions = sane_get_option_descriptor(m_handle, 0)->size;
+    ScannerOptionFactory optionsFactory;
     
     for(int i = 1; i < nbOptions; ++i)
     {
       const SANE_Option_Descriptor * description = sane_get_option_descriptor(m_handle, i);
-      std::cout << description->name << std::endl;
-      std::cout << description->title << std::endl;
-      std::cout << description->desc << std::endl;
+      if(optionsFactory.isValidOption(description))
+      {
+        m_options.push_back(optionsFactory.create(this, description));
+      }
     }
+    
+    wxGridSizer * gridSizer(new wxGridSizer(2));
+    std::for_each(m_options.begin(),
+                  m_options.end(),
+                  std::bind(&ScannerOption::append, std::placeholders::_1, gridSizer));
+    SetSizer(gridSizer);
+    gridSizer->SetSizeHints(this);
   }
   catch(const std::exception & e)
   {
