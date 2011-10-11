@@ -5,6 +5,11 @@
 #include "ScannerOptionFactory.h"
 #include "ScannerOption.h"
 
+BEGIN_EVENT_TABLE(ScannerDlg, wxDialog)
+  EVT_BUTTON(ID_BUTTON_SCAN, ScannerDlg::onScan)
+  EVT_BUTTON(ID_BUTTON_CANCEL, ScannerDlg::onCancel)
+END_EVENT_TABLE()
+
 namespace
 {
   void checkStatus(SANE_Status status)
@@ -47,12 +52,27 @@ ScannerDlg::ScannerDlg(wxWindow * parent):
       }
     }
     
-    wxGridSizer * gridSizer(new wxGridSizer(2));
+    
+    wxGridSizer * gridSizer = new wxGridSizer(2);
     std::for_each(m_options.begin(),
                   m_options.end(),
                   std::bind(&ScannerOption::append, std::placeholders::_1, gridSizer));
-    SetSizer(gridSizer);
-    gridSizer->SetSizeHints(this);
+    wxBoxSizer * hbox = new wxBoxSizer(wxHORIZONTAL);
+    hbox->Add(new wxButton(this, ID_BUTTON_SCAN, _T("Scan")),
+              1, 
+              wxEXPAND | wxRIGHT, 
+              3);
+    hbox->Add(new wxButton(this, ID_BUTTON_CANCEL, _T("Cancel")),
+              1, 
+              wxEXPAND | wxLEFT, 
+              3);
+    
+    wxBoxSizer * vbox = new wxBoxSizer(wxVERTICAL);
+    vbox->Add(gridSizer, 1, wxEXPAND | wxALL, 7);
+    vbox->Add(hbox, 0, wxEXPAND | wxBOTTOM | wxRIGHT | wxLEFT, 7);
+    
+    SetSizer(vbox);
+    vbox->SetSizeHints(this);
   }
   catch(const std::exception & e)
   {
@@ -65,4 +85,14 @@ ScannerDlg::~ScannerDlg()
 {
   sane_close(m_handle);
   sane_exit();
+}
+
+void ScannerDlg::onScan(wxCommandEvent &)
+{
+  EndModal(wxID_OK);
+}
+
+void ScannerDlg::onCancel(wxCommandEvent &)
+{
+  EndModal(wxID_CANCEL);
 }

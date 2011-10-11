@@ -14,6 +14,18 @@ public:
   ScannerDlg(wxWindow * parent);
   ~ScannerDlg();
 
+protected:
+  enum
+    {
+      ID_BUTTON_SCAN = wxID_HIGHEST + 1,
+      ID_BUTTON_CANCEL
+    };
+  
+  void onScan(wxCommandEvent &);
+  void onCancel(wxCommandEvent &);
+  
+  DECLARE_EVENT_TABLE();
+
 private:
   SANE_Handle m_handle;
   
