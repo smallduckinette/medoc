@@ -64,3 +64,28 @@ void ScannerOptionIntRange::append(wxSizer * sizer)
   sizer->Add(m_title, 0, wxEXPAND);
   sizer->Add(m_input, 1, wxEXPAND);
 }
+
+ScannerOptionBool::ScannerOptionBool(wxWindow * parent,
+                                     const SANE_Handle & handle,
+                                     int index,
+                                     SANE_String_Const title,
+                                     SANE_String_Const desc):
+  m_handle(handle),
+  m_index(index),
+  m_title(new wxStaticText(parent,
+                           wxID_ANY,
+                           wxString(title, wxConvUTF8))),
+  m_input(new wxCheckBox(parent,
+                         wxID_ANY, 
+                         wxEmptyString))
+{
+  SANE_Bool bValue;
+  sane_control_option(m_handle, index, SANE_ACTION_GET_VALUE, &bValue, nullptr);
+  m_input->SetValue(bValue);  
+}
+
+void ScannerOptionBool::append(wxSizer * sizer)
+{
+  sizer->Add(m_title, 0, wxEXPAND);
+  sizer->Add(m_input, 1, wxEXPAND);
+}

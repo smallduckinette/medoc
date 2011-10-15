@@ -11,35 +11,42 @@ ScannerOptionFactory::create(wxWindow * wxWindow,
 {
   assert(isValidOption(descriptor));
 
-  switch(descriptor->type)
+  if(descriptor->type == SANE_TYPE_STRING
+     && descriptor->constraint_type == SANE_CONSTRAINT_STRING_LIST)
   {
-  case SANE_TYPE_STRING:
-    if(descriptor->constraint_type == SANE_CONSTRAINT_STRING_LIST)
-    {
-      return std::shared_ptr<ScannerOption>
-        (new ScannerOptionStringChoice(wxWindow,
-                                       handle,
-                                       index,
-                                       descriptor->title,
-                                       descriptor->desc,
-                                       descriptor->constraint.string_list));
-    }
-  case SANE_TYPE_INT:
-    if(descriptor->constraint_type == SANE_CONSTRAINT_RANGE)
-    {
-      return std::shared_ptr<ScannerOption>
-        (new ScannerOptionIntRange(wxWindow,
-                                   handle,
-                                   index,
-                                   descriptor->title,
-                                   descriptor->desc,
-                                   descriptor->constraint.range));
-    }
-  default:
-    break;
+    return std::shared_ptr<ScannerOption>
+      (new ScannerOptionStringChoice(wxWindow,
+                                     handle,
+                                     index,
+                                     descriptor->title,
+                                     descriptor->desc,
+                                     descriptor->constraint.string_list));
   }
-  
-  throw std::runtime_error("Unsupported option");
+  else if((descriptor->type == SANE_TYPE_INT || descriptor->type == SANE_TYPE_FIXED)
+          && descriptor->constraint_type == SANE_CONSTRAINT_RANGE)
+  {
+    return std::shared_ptr<ScannerOption>
+      (new ScannerOptionIntRange(wxWindow,
+                                 handle,
+                                 index,
+                                 descriptor->title,
+                                 descriptor->desc,
+                                 descriptor->constraint.range));
+  }
+  else if(descriptor->type == SANE_TYPE_BOOL)
+  {
+    return std::shared_ptr<ScannerOption>
+      (new ScannerOptionBool(wxWindow,
+                             handle,
+                             index,
+                             descriptor->title,
+                             descriptor->desc));
+  }
+  else
+  {
+    std::cout << descriptor->type << " - " << descriptor->constraint_type << std::endl;
+    throw std::runtime_error("Unsupported option");
+  }
 }
 
 bool ScannerOptionFactory::isValidOption(const SANE_Option_Descriptor * descriptor) const

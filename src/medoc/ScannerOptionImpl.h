@@ -47,4 +47,23 @@ private:
   wxTextCtrl * m_input;
 };
 
+class ScannerOptionBool : public ScannerOption
+{
+public:
+  ScannerOptionBool(wxWindow * parent,
+                    const SANE_Handle & handle,
+                    int index,
+                    SANE_String_Const title,
+                    SANE_String_Const desc);
+  
+  void append(wxSizer * sizer);
+
+private:
+  SANE_Handle m_handle;
+  int m_index;
+
+  wxStaticText * m_title;
+  wxCheckBox * m_input;
+};
+
 #endif

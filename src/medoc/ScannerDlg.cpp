@@ -39,18 +39,16 @@ ScannerDlg::ScannerDlg(wxWindow * parent):
   
   checkStatus(sane_open((*device_list)->name, &m_handle));
   
-  int nbOptions = sane_get_option_descriptor(m_handle, 0)->size;
   ScannerOptionFactory optionsFactory;
-  
-  for(int i = 1; i < nbOptions; ++i)
+  int index = 1;
+  while(const SANE_Option_Descriptor * description = sane_get_option_descriptor(m_handle, index))
   {
-    const SANE_Option_Descriptor * description = sane_get_option_descriptor(m_handle, i);
     if(optionsFactory.isValidOption(description))
     {
-      m_options.push_back(optionsFactory.create(this, m_handle, i, description));
+      m_options.push_back(optionsFactory.create(this, m_handle, index, description));
     }
+    ++index;
   }
-  
   
   wxGridSizer * gridSizer = new wxGridSizer(2);
   std::for_each(m_options.begin(),
