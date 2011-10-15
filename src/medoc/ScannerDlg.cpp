@@ -73,6 +73,11 @@ ScannerDlg::ScannerDlg(wxWindow * parent):
   vbox->SetSizeHints(this);
 }
 
+wxImage ScannerDlg::getImage() const
+{
+  return m_image;
+}
+
 ScannerDlg::~ScannerDlg()
 {
   sane_close(m_handle);
@@ -81,6 +86,22 @@ ScannerDlg::~ScannerDlg()
 
 void ScannerDlg::onScan(wxCommandEvent &)
 {
+  checkStatus(sane_start(m_handle));
+  
+  SANE_Parameters parameters;
+  checkStatus(sane_get_parameters(m_handle, &parameters));
+  
+  m_image.Create(parameters.pixels_per_line, parameters.lines);
+  
+  size_t currentPosition = 0;
+  SANE_Int length;
+  while(sane_read(m_handle, m_image.GetData() + currentPosition, 4096, &length) == SANE_STATUS_GOOD)
+  {
+    currentPosition += length;
+  }
+
+  std::cout << currentPosition << std::endl;
+
   EndModal(wxID_OK);
 }
 

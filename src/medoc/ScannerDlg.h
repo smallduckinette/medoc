@@ -13,7 +13,9 @@ class ScannerDlg : public wxDialog
 public:
   ScannerDlg(wxWindow * parent);
   ~ScannerDlg();
-
+  
+  wxImage getImage() const;
+  
 protected:
   enum
     {
@@ -24,10 +26,12 @@ protected:
   void onScan(wxCommandEvent &);
   void onCancel(wxCommandEvent &);
   
+
   DECLARE_EVENT_TABLE();
 
 private:
   SANE_Handle m_handle;
+  wxImage m_image;
   
   std::vector<std::shared_ptr<ScannerOption> > m_options;
 };
