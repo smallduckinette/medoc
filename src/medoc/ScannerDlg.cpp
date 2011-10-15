@@ -2,6 +2,7 @@
 
 #include <stdexcept>
 #include <algorithm>
+#include <wx/progdlg.h>
 #include "ScannerOptionFactory.h"
 #include "ScannerOption.h"
 
@@ -93,11 +94,16 @@ void ScannerDlg::onScan(wxCommandEvent &)
   
   m_image.Create(parameters.pixels_per_line, parameters.lines);
   
+  size_t totalPosition = parameters.bytes_per_line * parameters.lines;
   size_t currentPosition = 0;
   SANE_Int length;
+  
+  wxProgressDialog progress(_("Scanning..."), _("Scanning document..."), totalPosition);
+  progress.Update(0);
   while(sane_read(m_handle, m_image.GetData() + currentPosition, 4096, &length) == SANE_STATUS_GOOD)
   {
     currentPosition += length;
+    progress.Update(currentPosition);
   }
 
   EndModal(wxID_OK);
