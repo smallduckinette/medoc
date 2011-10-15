@@ -7,6 +7,7 @@ class PageInfo : public wxClientData
 {
 public:
   PageInfo(const wxString & file);
+  PageInfo(const wxImage & image);
   
   wxImage getImage() const;
 
