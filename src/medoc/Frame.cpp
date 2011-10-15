@@ -86,7 +86,7 @@ void Frame::onImportDevice(wxCommandEvent &)
     ScannerDlg scannerDlg(this);
     if(scannerDlg.ShowModal() == wxID_OK)
     {
-      m_imagePanel->setImage(scannerDlg.getImage());
+      m_imagePanel->setImage(scannerDlg.getImages().back());
     }
   }
   catch(const std::exception & e)

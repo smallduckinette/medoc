@@ -14,7 +14,7 @@ public:
   ScannerDlg(wxWindow * parent);
   ~ScannerDlg();
   
-  wxImage getImage() const;
+  std::vector<wxImage> getImages() const;
   
 protected:
   enum
@@ -31,7 +31,7 @@ protected:
 
 private:
   SANE_Handle m_handle;
-  wxImage m_image;
+  std::vector<wxImage> m_images;
   
   std::vector<std::shared_ptr<ScannerOption> > m_options;
 };

@@ -72,9 +72,9 @@ ScannerDlg::ScannerDlg(wxWindow * parent):
   vbox->SetSizeHints(this);
 }
 
-wxImage ScannerDlg::getImage() const
+std::vector<wxImage> ScannerDlg::getImages() const
 {
-  return m_image;
+  return m_images;
 }
 
 ScannerDlg::~ScannerDlg()
@@ -90,29 +90,36 @@ void ScannerDlg::onScan(wxCommandEvent &)
     option->setOption();
   }
 
-  checkStatus(sane_start(m_handle));
-  
-  SANE_Parameters parameters;
-  checkStatus(sane_get_parameters(m_handle, &parameters));
-  
-  std::vector<SANE_Byte> data;
-  data.reserve(parameters.bytes_per_line * parameters.lines);
-  std::vector<SANE_Byte> buffer(4096);
-  wxProgressDialog progress(_("Scanning..."), 
-                            _("Scanning document..."), 
-                            parameters.bytes_per_line * parameters.lines);
-  progress.Update(0);
-  SANE_Int length;  
-  while(sane_read(m_handle, &buffer[0], buffer.size(), &length) == SANE_STATUS_GOOD)
-  {
-    data.insert(data.end(), buffer.begin(), buffer.begin() + length);
-    progress.Update(data.size());
-  }
+  int imageNb = 0;
 
-  m_image.Create(parameters.pixels_per_line, data.size() / parameters.bytes_per_line);
-  std::copy(data.begin(), data.end(), m_image.GetData());
+  while(sane_start(m_handle) == SANE_STATUS_GOOD)
+  {
+    ++imageNb;
+    SANE_Parameters parameters;
+    checkStatus(sane_get_parameters(m_handle, &parameters));
+
+    std::vector<SANE_Byte> data;
+    data.reserve(parameters.bytes_per_line * parameters.lines);
+    std::vector<SANE_Byte> buffer(4096);
+    wxString message;
+    message << _("Scanning page ") << imageNb;
+    wxProgressDialog progress(_("Scanning..."), 
+                              message,
+                              parameters.bytes_per_line * parameters.lines);
+    progress.Update(0);
+    SANE_Int length;  
+    while(sane_read(m_handle, &buffer[0], buffer.size(), &length) == SANE_STATUS_GOOD)
+    {
+      data.insert(data.end(), buffer.begin(), buffer.begin() + length);
+      progress.Update(data.size());
+    }
+    
+    wxImage image(parameters.pixels_per_line, data.size() / parameters.bytes_per_line);
+    std::copy(data.begin(), data.end(), image.GetData());
+    m_images.push_back(image);
+  }
   
-  EndModal(wxID_OK);
+  EndModal(imageNb > 0 ? wxID_OK : wxID_CANCEL);
 }
 
 void ScannerDlg::onCancel(wxCommandEvent &)
