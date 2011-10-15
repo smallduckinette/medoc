@@ -8,15 +8,17 @@ class ScannerOptionStringChoice : public ScannerOption
 {
 public:
   ScannerOptionStringChoice(wxWindow * parent,
-                            SANE_String_Const name,
+                            const SANE_Handle & handle,
+                            int index,
                             SANE_String_Const title,
                             SANE_String_Const desc,
                             const SANE_String_Const * string_list);
   
   void append(wxSizer * sizer);
-
+  
 private:
-  SANE_String_Const m_name;
+  SANE_Handle m_handle;
+  int m_index;
   
   wxStaticText * m_title;
   wxChoice * m_options;
@@ -26,7 +28,8 @@ class ScannerOptionIntRange : public ScannerOption
 {
 public:
   ScannerOptionIntRange(wxWindow * parent,
-                        SANE_String_Const name,
+                        const SANE_Handle & handle,
+                        int index,
                         SANE_String_Const title,
                         SANE_String_Const desc,
                         const SANE_Range * range);
@@ -34,7 +37,8 @@ public:
   void append(wxSizer * sizer);
 
 private:
-  SANE_String_Const m_name;
+  SANE_Handle m_handle;
+  int m_index;
   int m_min;
   int m_max;
   int m_quant;

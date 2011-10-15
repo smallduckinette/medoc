@@ -5,6 +5,8 @@
 
 std::shared_ptr<ScannerOption> 
 ScannerOptionFactory::create(wxWindow * wxWindow,
+                             const SANE_Handle & handle,
+                             int index,
                              const SANE_Option_Descriptor * descriptor) const
 {
   assert(isValidOption(descriptor));
@@ -16,7 +18,8 @@ ScannerOptionFactory::create(wxWindow * wxWindow,
     {
       return std::shared_ptr<ScannerOption>
         (new ScannerOptionStringChoice(wxWindow,
-                                       descriptor->name,
+                                       handle,
+                                       index,
                                        descriptor->title,
                                        descriptor->desc,
                                        descriptor->constraint.string_list));
@@ -26,7 +29,8 @@ ScannerOptionFactory::create(wxWindow * wxWindow,
     {
       return std::shared_ptr<ScannerOption>
         (new ScannerOptionIntRange(wxWindow,
-                                   descriptor->name,
+                                   handle,
+                                   index,
                                    descriptor->title,
                                    descriptor->desc,
                                    descriptor->constraint.range));

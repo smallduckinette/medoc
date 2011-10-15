@@ -11,6 +11,8 @@ class ScannerOptionFactory
 {
 public:
   std::shared_ptr<ScannerOption> create(wxWindow * wxWindow,
+                                        const SANE_Handle & handle,
+                                        int index,
                                         const SANE_Option_Descriptor * descriptor) const;
   bool isValidOption(const SANE_Option_Descriptor * descriptor) const;
 };

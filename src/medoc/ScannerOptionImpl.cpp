@@ -2,11 +2,13 @@
 
 
 ScannerOptionStringChoice::ScannerOptionStringChoice(wxWindow * parent,
-                                                     SANE_String_Const name,
+                                                     const SANE_Handle & handle,
+                                                     int index,
                                                      SANE_String_Const title,
                                                      SANE_String_Const desc,
                                                      const SANE_String_Const * string_list):
-  m_name(name),
+  m_handle(handle),
+  m_index(index),
   m_title(new wxStaticText(parent, wxID_ANY, wxString(title, wxConvUTF8))),
   m_options(new wxChoice(parent, wxID_ANY))
 {
@@ -15,6 +17,10 @@ ScannerOptionStringChoice::ScannerOptionStringChoice(wxWindow * parent,
     m_options->Append(wxString(*string_list, wxConvUTF8));
     ++string_list;
   }
+  
+  char cValue[255];
+  sane_control_option(m_handle, index, SANE_ACTION_GET_VALUE, cValue, nullptr);
+  m_options->SetStringSelection(wxString(cValue, wxConvUTF8));
 }
 
 void ScannerOptionStringChoice::append(wxSizer * sizer)
@@ -24,11 +30,13 @@ void ScannerOptionStringChoice::append(wxSizer * sizer)
 }
 
 ScannerOptionIntRange::ScannerOptionIntRange(wxWindow * parent,
-                                             SANE_String_Const name,
+                                             const SANE_Handle & handle,
+                                             int index,
                                              SANE_String_Const title,
                                              SANE_String_Const desc,
                                              const SANE_Range * range):
-  m_name(name),
+  m_handle(handle),
+  m_index(index),
   m_min(range->min),
   m_max(range->max),
   m_quant(range->quant),
@@ -41,9 +49,14 @@ ScannerOptionIntRange::ScannerOptionIntRange(wxWindow * parent,
                          wxTextValidator(wxFILTER_NUMERIC)))
 {
   wxString label;
-  label << wxString(name, wxConvUTF8) << _(" [") << m_min << _(" ") << m_max << _("]");
-
+  label << wxString(title, wxConvUTF8) << _(" [") << m_min << _(" ") << m_max << _("]");
   m_title = new wxStaticText(parent, wxID_ANY, label);
+  
+  int iValue;
+  sane_control_option(m_handle, index, SANE_ACTION_GET_VALUE, &iValue, nullptr);
+  wxString value;
+  value << iValue;
+  m_input->SetValue(value);
 }
 
 void ScannerOptionIntRange::append(wxSizer * sizer)

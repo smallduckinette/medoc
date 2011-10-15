@@ -81,8 +81,16 @@ void Frame::onImportFile(wxCommandEvent &)
 
 void Frame::onImportDevice(wxCommandEvent &)
 {
-  ScannerDlg scannerDlg(this);
-  scannerDlg.ShowModal();
+  try
+  {
+    ScannerDlg scannerDlg(this);
+    scannerDlg.ShowModal();
+  }
+  catch(const std::exception & e)
+  {
+    wxMessageDialog message(this, wxString(e.what(), wxConvUTF8));
+    message.ShowModal();
+  }
 }
 
 void Frame::onImageSelected(wxCommandEvent & event)
