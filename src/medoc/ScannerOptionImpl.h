@@ -15,6 +15,7 @@ public:
                             const SANE_String_Const * string_list);
   
   void append(wxSizer * sizer);
+  void setOption();
   
 private:
   SANE_Handle m_handle;
@@ -35,6 +36,7 @@ public:
                         const SANE_Range * range);
 
   void append(wxSizer * sizer);
+  void setOption();
 
 private:
   SANE_Handle m_handle;
@@ -57,6 +59,7 @@ public:
                     SANE_String_Const desc);
   
   void append(wxSizer * sizer);
+  void setOption();
 
 private:
   SANE_Handle m_handle;

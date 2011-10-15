@@ -29,6 +29,15 @@ void ScannerOptionStringChoice::append(wxSizer * sizer)
   sizer->Add(m_options, 1, wxEXPAND);
 }
 
+void ScannerOptionStringChoice::setOption()
+{
+  sane_control_option(m_handle, 
+                      m_index, 
+                      SANE_ACTION_SET_VALUE, 
+                      const_cast<char *>(m_options->GetStringSelection().utf8_str().data()), 
+                      nullptr);
+}
+
 ScannerOptionIntRange::ScannerOptionIntRange(wxWindow * parent,
                                              const SANE_Handle & handle,
                                              int index,
@@ -52,7 +61,7 @@ ScannerOptionIntRange::ScannerOptionIntRange(wxWindow * parent,
   label << wxString(title, wxConvUTF8) << _(" [") << m_min << _(" ") << m_max << _("]");
   m_title = new wxStaticText(parent, wxID_ANY, label);
   
-  int iValue;
+  SANE_Int iValue;
   sane_control_option(m_handle, index, SANE_ACTION_GET_VALUE, &iValue, nullptr);
   wxString value;
   value << iValue;
@@ -63,6 +72,19 @@ void ScannerOptionIntRange::append(wxSizer * sizer)
 {
   sizer->Add(m_title, 0, wxEXPAND);
   sizer->Add(m_input, 1, wxEXPAND);
+}
+
+void ScannerOptionIntRange::setOption()
+{
+  SANE_Int value;
+  long lValue;
+  m_input->GetValue().ToLong(&lValue);
+  value = lValue;
+  sane_control_option(m_handle, 
+                      m_index, 
+                      SANE_ACTION_SET_VALUE, 
+                      &value,
+                      nullptr);   
 }
 
 ScannerOptionBool::ScannerOptionBool(wxWindow * parent,
@@ -88,4 +110,14 @@ void ScannerOptionBool::append(wxSizer * sizer)
 {
   sizer->Add(m_title, 0, wxEXPAND);
   sizer->Add(m_input, 1, wxEXPAND);
+}
+
+void ScannerOptionBool::setOption()
+{
+  SANE_Bool value = m_input->GetValue() ? SANE_TRUE : SANE_FALSE;
+  sane_control_option(m_handle, 
+                      m_index, 
+                      SANE_ACTION_SET_VALUE, 
+                      &value,
+                      nullptr);  
 }

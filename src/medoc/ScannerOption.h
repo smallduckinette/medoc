@@ -9,6 +9,7 @@ public:
   virtual ~ScannerOption();
   
   virtual void append(wxSizer * sizer) = 0;
+  virtual void setOption() = 0;
 };
 
 #endif

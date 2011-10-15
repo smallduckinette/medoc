@@ -85,6 +85,11 @@ ScannerDlg::~ScannerDlg()
 
 void ScannerDlg::onScan(wxCommandEvent &)
 {
+  for(auto option : m_options)
+  {
+    option->setOption();
+  }
+
   checkStatus(sane_start(m_handle));
   
   SANE_Parameters parameters;
