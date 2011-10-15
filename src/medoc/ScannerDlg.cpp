@@ -95,20 +95,23 @@ void ScannerDlg::onScan(wxCommandEvent &)
   SANE_Parameters parameters;
   checkStatus(sane_get_parameters(m_handle, &parameters));
   
-  m_image.Create(parameters.pixels_per_line, parameters.lines);
-  
-  size_t totalPosition = parameters.bytes_per_line * parameters.lines;
-  size_t currentPosition = 0;
-  SANE_Int length;
-  
-  wxProgressDialog progress(_("Scanning..."), _("Scanning document..."), totalPosition);
+  std::vector<SANE_Byte> data;
+  data.reserve(parameters.bytes_per_line * parameters.lines);
+  std::vector<SANE_Byte> buffer(4096);
+  wxProgressDialog progress(_("Scanning..."), 
+                            _("Scanning document..."), 
+                            parameters.bytes_per_line * parameters.lines);
   progress.Update(0);
-  while(sane_read(m_handle, m_image.GetData() + currentPosition, 4096, &length) == SANE_STATUS_GOOD)
+  SANE_Int length;  
+  while(sane_read(m_handle, &buffer[0], buffer.size(), &length) == SANE_STATUS_GOOD)
   {
-    currentPosition += length;
-    progress.Update(currentPosition);
+    data.insert(data.end(), buffer.begin(), buffer.begin() + length);
+    progress.Update(data.size());
   }
 
+  m_image.Create(parameters.pixels_per_line, data.size() / parameters.bytes_per_line);
+  std::copy(data.begin(), data.end(), m_image.GetData());
+  
   EndModal(wxID_OK);
 }
 
