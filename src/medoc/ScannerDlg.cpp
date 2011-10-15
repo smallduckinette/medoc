@@ -100,8 +100,6 @@ void ScannerDlg::onScan(wxCommandEvent &)
     currentPosition += length;
   }
 
-  std::cout << currentPosition << std::endl;
-
   EndModal(wxID_OK);
 }
 
