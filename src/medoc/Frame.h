@@ -18,12 +18,16 @@ protected:
       ID_IMPORT_DEVICE,
       ID_EXPORT_FILE,
       ID_EXPORT_DB,
+      ID_CONFIG_DB,
       ID_IMAGE_LIST
     };
   
   void onQuit(wxCommandEvent &);
   void onImportFile(wxCommandEvent &);
   void onImportDevice(wxCommandEvent &);
+  void onExportFile(wxCommandEvent &);
+  void onExportDb(wxCommandEvent &);
+  void onConfigureDatabase(wxCommandEvent &);
 
   void onImageSelected(wxCommandEvent & event);
   

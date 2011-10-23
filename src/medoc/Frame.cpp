@@ -3,12 +3,14 @@
 #include "ImagePanel.h"
 #include "PageInfo.h"
 #include "ScannerDlg.h"
+#include "DatabaseDlg.h"
 
 
 BEGIN_EVENT_TABLE(Frame, wxFrame)
   EVT_MENU(ID_FILE_QUIT, Frame::onQuit)
   EVT_MENU(ID_IMPORT_FILE, Frame::onImportFile)
   EVT_MENU(ID_IMPORT_DEVICE, Frame::onImportDevice)
+  EVT_MENU(ID_CONFIG_DB, Frame::onConfigureDatabase)
   EVT_LISTBOX(ID_IMAGE_LIST, Frame::onImageSelected)
 END_EVENT_TABLE()
 
@@ -33,6 +35,8 @@ Frame::Frame():
   wxMenu * menuExport = new wxMenu;
   menuExport->Append(ID_EXPORT_FILE, _("To &file..."));
   menuExport->Append(ID_EXPORT_DB, _("To &database..."));
+  menuExport->AppendSeparator();
+  menuExport->Append(ID_CONFIG_DB, _("&Configure database...&"));
   
   wxMenuBar * menuBar = new wxMenuBar;
   menuBar->Append(menuFile, _("&File"));
@@ -97,6 +101,12 @@ void Frame::onImportDevice(wxCommandEvent &)
     wxMessageDialog message(this, wxString(e.what(), wxConvUTF8));
     message.ShowModal();
   }
+}
+
+void Frame::onConfigureDatabase(wxCommandEvent &)
+{
+  DatabaseDlg databaseDlg(this);
+  databaseDlg.ShowModal();
 }
 
 void Frame::onImageSelected(wxCommandEvent & event)
