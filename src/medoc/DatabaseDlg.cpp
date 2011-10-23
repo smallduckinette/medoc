@@ -1,5 +1,7 @@
 #include "DatabaseDlg.h"
 
+#include "MedocDb.h"
+
 
 BEGIN_EVENT_TABLE(DatabaseDlg, wxDialog)
   EVT_BUTTON(ID_BUTTON_OK, DatabaseDlg::onOk)
@@ -54,4 +56,23 @@ void DatabaseDlg::onCancel(wxCommandEvent &)
 
 void DatabaseDlg::onTest(wxCommandEvent &)
 {
+  try
+  {
+    long port = 0;
+    m_port->GetValue().ToLong(&port);
+    MedocDb medocDb(std::string(m_host->GetValue().mb_str(wxConvUTF8)),
+                    port,
+                    std::string(m_name->GetValue().mb_str(wxConvUTF8)),
+                    std::string(m_login->GetValue().mb_str(wxConvUTF8)),
+                    std::string(m_password->GetValue().mb_str(wxConvUTF8)));
+    wxMessageDialog message(this, _("Connection successful"));
+    message.ShowModal();    
+  }
+  catch(const std::exception & e)
+  {
+    std::ostringstream str;
+    str << "Connection failed: " << e.what();
+    wxMessageDialog message(this, wxString(str.str().c_str(), wxConvUTF8));
+    message.ShowModal();    
+  }
 }
