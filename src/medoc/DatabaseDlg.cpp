@@ -60,13 +60,13 @@ void DatabaseDlg::onTest(wxCommandEvent &)
   {
     long port = 0;
     m_port->GetValue().ToLong(&port);
-    MedocDb medocDb(std::string(m_host->GetValue().mb_str(wxConvUTF8)),
+    MedocDb medocDb(m_host->GetValue(),
                     port,
-                    std::string(m_name->GetValue().mb_str(wxConvUTF8)),
-                    std::string(m_login->GetValue().mb_str(wxConvUTF8)),
-                    std::string(m_password->GetValue().mb_str(wxConvUTF8)));
+                    m_name->GetValue(),
+                    m_login->GetValue(),
+                    m_password->GetValue());
     wxMessageDialog message(this, _("Connection successful"));
-    message.ShowModal();    
+    message.ShowModal();
   }
   catch(const std::exception & e)
   {
