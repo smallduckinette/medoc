@@ -1,8 +1,31 @@
 #include "MedocDb.h"
 
 
-namespace
+namespace pqxx
 {
+  template<> struct PQXX_LIBEXPORT string_traits<wxString>
+  {
+    static const char * name() { return "wxString"; }
+    static bool has_null() { return false; }
+    static bool is_null(const wxString &) { return false; }
+    static wxString null() { internal::throw_null_conversion(name()); return wxString(); }
+    static void from_string(const char Str[], wxString & Obj) { Obj = wxString(Str, wxConvUTF8); }
+    static PGSTD::string to_string(const wxString & Obj) { return std::string(Obj.mb_str(wxConvUTF8)); }
+  };
+  
+  template<> struct PQXX_LIBEXPORT string_traits<wxDateTime>
+  {
+    static const char * name() { return "wxDateTime"; }
+    static bool has_null() { return false; }
+    static bool is_null(const wxDateTime &) { return false; }
+    static wxDateTime null() { internal::throw_null_conversion(name()); return wxDateTime(); }
+    static void from_string(const char Str[], wxDateTime & Obj) { Obj.ParseDateTime(wxString(Str, wxConvUTF8)); }
+    static PGSTD::string to_string(const wxDateTime & Obj) { return std::string(Obj.Format().mb_str(wxConvUTF8)); }
+  };
+}
+
+namespace
+{  
   class GetLanguages : public pqxx::transactor<pqxx::transaction<> >
   {
   public:
@@ -34,21 +57,34 @@ namespace
   public:
     CreateDocument(const wxString & title,
                    const wxDateTime & dateTime,
+                   const wxString & language,
                    const std::vector<MedocDb::File> files,
                    const wxString & password):
       m_title(title),
       m_dateTime(dateTime),
+      m_language(language),
       m_files(files),
       m_password(password)
     {
     }
-
+    
     void operator()(argument_type & T)
     {
-      pqxx::result result = T.prepared("createDocument").exec();
-      //for(const pqxx::result::tuple & tuple : result)
+      pqxx::result result = 
+        T.prepared("createDocument")
+        (m_title)
+        (m_dateTime)
+        (m_password).exec();
+      int documentId = result[0][0].as<int>();
+      for(const MedocDb::File & file : m_files)
       {
-        //m_languages.push_back(wxString(tuple[0].c_str(), wxConvUTF8));
+        T.prepared("addFile")
+          (documentId)
+          (m_title)
+          (m_language)
+          (file.m_thumb)
+          (file.m_image)
+          (m_password).exec();
       }
     }
 
@@ -70,6 +106,7 @@ namespace
   private:
     wxString m_title;
     wxDateTime m_dateTime;
+    wxString m_language;
     std::vector<MedocDb::File> m_files;
     wxString m_password;
   };
@@ -109,11 +146,13 @@ std::vector<wxString> MedocDb::getLanguages() const
 
 void MedocDb::createDocument(const wxString & title,
                              const wxDateTime & dateTime,
+                             const wxString & language,
                              const std::vector<File> & files,
                              const wxString & password)
 {
   m_dbConn->perform(CreateDocument(title,
                                    dateTime,
+                                   language,
                                    files,
                                    password));
 }

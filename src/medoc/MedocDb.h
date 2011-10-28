@@ -17,13 +17,13 @@ public:
   
   struct File
   {
-    wxString m_description;
-    wxStreamBuffer m_image;
-    wxStreamBuffer m_thumb;
+    std::string m_image;
+    std::string m_thumb;
   };
 
   void createDocument(const wxString & title,
                       const wxDateTime & dateTime,
+                      const wxString & language,
                       const std::vector<File> & files,
                       const wxString & password);
   
