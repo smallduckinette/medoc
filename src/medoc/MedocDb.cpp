@@ -39,7 +39,7 @@ namespace
       pqxx::result result = T.prepared("getLanguages").exec();
       for(const pqxx::result::tuple & tuple : result)
       {
-        m_languages.push_back(wxString(tuple[0].c_str(), wxConvUTF8));
+        m_languages.push_back(tuple[0].as<wxString>());
       }
     }
     
@@ -113,20 +113,16 @@ namespace
 }
 
 
-MedocDb::MedocDb(const wxString & host,
-                 int port,
-                 const wxString & dbName,
-                 const wxString & login,
-                 const wxString & password)
+MedocDb::MedocDb(const DbConfig & dbConfig)
 {
   try
   {
     wxString str;
-    str << _("host=") << host << _(" ")
-        << _("port=") << port << _(" ")
-        << _("dbname=") << dbName << _(" ")
-        << _("user=") << login << _(" ")
-        << _("password=") << password;
+    str << _("host=") << dbConfig.getHost() << _(" ")
+        << _("port=") << dbConfig.getPort() << _(" ")
+        << _("dbname=") << dbConfig.getDbName() << _(" ")
+        << _("user=") << dbConfig.getLogin() << _(" ")
+        << _("password=") << dbConfig.getPassword();
     m_dbConn.reset(new pqxx::connection(str.mb_str(wxConvUTF8)));
     GetLanguages::prepare(*m_dbConn);
     CreateDocument::prepare(*m_dbConn);

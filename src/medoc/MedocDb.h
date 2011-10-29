@@ -3,15 +3,12 @@
 
 #include <pqxx/pqxx>
 #include <wx/wx.h>
+#include "Config.h"
 
 class MedocDb
 {
 public:
-  MedocDb(const wxString & host,
-          int port,
-          const wxString & dbName,
-          const wxString & login,
-          const wxString & password);
+  MedocDb(const DbConfig & dbConfig);
   
   std::vector<wxString> getLanguages() const;
   

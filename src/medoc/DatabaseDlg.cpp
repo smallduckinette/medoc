@@ -44,6 +44,17 @@ DatabaseDlg::DatabaseDlg(wxWindow * parent):
   SetSize(400, wxDefaultCoord);
 }
 
+DbConfig DatabaseDlg::getDbConfig() const
+{
+  long port = 0;
+  m_port->GetValue().ToLong(&port);
+  return DbConfig(m_host->GetValue(),
+                  port,
+                  m_name->GetValue(),
+                  m_login->GetValue(),
+                  m_password->GetValue());
+}
+
 void DatabaseDlg::onOk(wxCommandEvent &)
 {
   EndModal(wxID_OK);
@@ -58,13 +69,7 @@ void DatabaseDlg::onTest(wxCommandEvent &)
 {
   try
   {
-    long port = 0;
-    m_port->GetValue().ToLong(&port);
-    MedocDb medocDb(m_host->GetValue(),
-                    port,
-                    m_name->GetValue(),
-                    m_login->GetValue(),
-                    m_password->GetValue());
+    MedocDb medocDb(getDbConfig());
     wxMessageDialog message(this, _("Connection successful"));
     message.ShowModal();
   }

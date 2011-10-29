@@ -2,12 +2,15 @@
 #define __MEDOC_DATABASEDLG_H__
 
 #include <wx/wx.h>
+#include "Config.h"
 
 class DatabaseDlg : public wxDialog
 {
 public:
   DatabaseDlg(wxWindow * parent);
-
+  
+  DbConfig getDbConfig() const;
+  
 protected:
   enum
     {
@@ -20,8 +23,8 @@ protected:
   void onCancel(wxCommandEvent &);
   void onTest(wxCommandEvent &);
 
-  DECLARE_EVENT_TABLE();
-
+  DECLARE_EVENT_TABLE();  
+  
 private:
   wxTextCtrl * m_host;
   wxTextCtrl * m_port;

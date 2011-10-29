@@ -4,12 +4,14 @@
 #include "PageInfo.h"
 #include "ScannerDlg.h"
 #include "DatabaseDlg.h"
+#include "ExportDbDlg.h"
 
 
 BEGIN_EVENT_TABLE(Frame, wxFrame)
   EVT_MENU(ID_FILE_QUIT, Frame::onQuit)
   EVT_MENU(ID_IMPORT_FILE, Frame::onImportFile)
   EVT_MENU(ID_IMPORT_DEVICE, Frame::onImportDevice)
+  EVT_MENU(ID_EXPORT_DB, Frame::onExportDb)
   EVT_MENU(ID_CONFIG_DB, Frame::onConfigureDatabase)
   EVT_LISTBOX(ID_IMAGE_LIST, Frame::onImageSelected)
 END_EVENT_TABLE()
@@ -103,10 +105,41 @@ void Frame::onImportDevice(wxCommandEvent &)
   }
 }
 
+void Frame::onExportDb(wxCommandEvent &)
+{
+  bool retry = true;
+  while(retry)
+  {
+    try
+    {
+      ExportDbDlg exportDbDlg(this, m_config);
+      exportDbDlg.ShowModal();
+      retry = false;
+    }
+    catch(const std::exception & e)
+    {
+      wxMessageDialog message(this, wxString(e.what(), wxConvUTF8));
+      message.ShowModal();
+      DatabaseDlg databaseDlg(this);
+      if(databaseDlg.ShowModal() == wxID_OK)
+      {
+        m_config.setDbConfig(databaseDlg.getDbConfig());
+      }
+      else
+      {
+        retry = false;
+      }
+    }
+  }
+}
+
 void Frame::onConfigureDatabase(wxCommandEvent &)
 {
   DatabaseDlg databaseDlg(this);
-  databaseDlg.ShowModal();
+  if(databaseDlg.ShowModal() == wxID_OK)
+  {
+    m_config.setDbConfig(databaseDlg.getDbConfig());
+  }
 }
 
 void Frame::onImageSelected(wxCommandEvent & event)

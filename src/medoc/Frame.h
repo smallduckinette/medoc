@@ -2,6 +2,7 @@
 #define __MEDOC_FRAME_H__
 
 #include <wx/wx.h>
+#include "Config.h"
 
 class ImagePanel;
 
@@ -36,6 +37,7 @@ protected:
 private:
   wxListBox * m_imageList;
   ImagePanel * m_imagePanel;
+  Config m_config;
 };
 
 #endif
