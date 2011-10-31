@@ -183,6 +183,13 @@ bool MedocDb::checkUser(const wxString & account,
   return isValid;
 }
 
+MedocDb::File::File(const std::string & image,
+                    const std::string & thumb):
+  m_image(image),
+  m_thumb(thumb)
+{
+}
+
 void MedocDb::createDocument(const wxString & title,
                              const wxDateTime & dateTime,
                              const wxString & language,

@@ -1,6 +1,7 @@
 #ifndef __MEDOC_FRAME_H__
 #define __MEDOC_FRAME_H__
 
+#include <vector>
 #include <wx/wx.h>
 #include "Config.h"
 
@@ -35,6 +36,8 @@ protected:
   DECLARE_EVENT_TABLE();
 
 private:
+  std::vector<wxImage> getImages() const;
+
   wxListBox * m_imageList;
   ImagePanel * m_imagePanel;
   Config m_config;

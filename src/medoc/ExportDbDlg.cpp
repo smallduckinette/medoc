@@ -1,5 +1,6 @@
 #include "ExportDbDlg.h"
 
+#include <wx/mstream.h>
 #include "MedocDb.h"
 
 
@@ -10,9 +11,11 @@ END_EVENT_TABLE()
 
 
 ExportDbDlg::ExportDbDlg(wxWindow * parent,
-                         const Config & config):
+                         const Config & config,
+                         const std::vector<wxImage> & images):
   wxDialog(parent, wxID_NEW, _("Export to database")),
   m_config(config),
+  m_images(images),
   m_medocDb(config.getDbConfig()),
   m_title(new wxTextCtrl(this, wxID_NEW)),
   m_calendar(new wxCalendarCtrl(this, wxID_NEW)),
@@ -69,7 +72,7 @@ void ExportDbDlg::onExport(wxCommandEvent &)
         m_medocDb.createDocument(m_title->GetValue(),
                                  m_calendar->GetDate(),
                                  m_languages->GetStringSelection(),
-                                 std::vector<MedocDb::File>(),
+                                 processImages(),
                                  passwordDlg.GetValue());
       }
       else
@@ -85,4 +88,32 @@ void ExportDbDlg::onExport(wxCommandEvent &)
 void ExportDbDlg::onCancel(wxCommandEvent &)
 {
   EndModal(wxID_CANCEL);
+}
+
+std::vector<MedocDb::File> ExportDbDlg::processImages() const
+{
+  std::vector<MedocDb::File> files;
+  
+  for(const wxImage & image : m_images)
+  {
+    files.push_back
+      (MedocDb::File
+       (processImage(image), 
+        processImage(image.Scale(80, 80, wxIMAGE_QUALITY_HIGH))));
+  }
+  
+  return files;
+}
+
+std::string ExportDbDlg::processImage(const wxImage & image) const
+{
+  wxMemoryOutputStream memStream;
+  image.SaveFile(memStream, _("image/jpeg"));
+  std::vector<char> buffer(memStream.GetLength());
+  memStream.CopyTo(&buffer.at(0), memStream.GetLength());
+  std::string stringBuf;
+  std::copy(buffer.begin(),
+            buffer.end(),
+            std::back_inserter(stringBuf));
+  return stringBuf;
 }

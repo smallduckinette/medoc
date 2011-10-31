@@ -24,7 +24,7 @@ Frame::Frame():
           wxDefaultPosition,
           wxSize(800, 600)),
   m_imageList(new wxListBox(this, ID_IMAGE_LIST)),
-  m_imagePanel(new ImagePanel(this, wxImage(_("Diagram.png"))))
+  m_imagePanel(new ImagePanel(this))
 {
   // Menus
   wxMenu * menuFile = new wxMenu;
@@ -49,7 +49,6 @@ Frame::Frame():
   
   // Frame
   wxBoxSizer * sizer = new wxBoxSizer(wxHORIZONTAL);
-  m_imagePanel->setImage(wxImage(_("P1010568.JPG")));
   sizer->Add(m_imageList, 0, wxEXPAND);
   sizer->Add(m_imagePanel, 1, wxEXPAND);
 
@@ -112,7 +111,7 @@ void Frame::onExportDb(wxCommandEvent &)
   {
     try
     {
-      ExportDbDlg exportDbDlg(this, m_config);
+      ExportDbDlg exportDbDlg(this, m_config, getImages());
       exportDbDlg.ShowModal();
       retry = false;
     }
@@ -145,4 +144,14 @@ void Frame::onConfigureDatabase(wxCommandEvent &)
 void Frame::onImageSelected(wxCommandEvent & event)
 {
   m_imagePanel->setImage(static_cast<PageInfo *>(event.GetClientObject())->getImage());
+}
+
+std::vector<wxImage> Frame::getImages() const
+{
+  std::vector<wxImage> images;
+  for(size_t i = 0; i < m_imageList->GetCount(); ++i)
+  {
+    images.push_back(static_cast<PageInfo *>(m_imageList->GetClientObject(i))->getImage());
+  }
+  return images;
 }

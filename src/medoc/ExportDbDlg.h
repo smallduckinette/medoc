@@ -10,7 +10,8 @@ class ExportDbDlg : public wxDialog
 {
 public:
   ExportDbDlg(wxWindow * parent,
-              const Config & config);
+              const Config & config,
+              const std::vector<wxImage> & images);
   
 protected:
   enum
@@ -25,7 +26,11 @@ protected:
   DECLARE_EVENT_TABLE();
   
 private:
+  std::vector<MedocDb::File> processImages() const;
+  std::string processImage(const wxImage & image) const;
+
   Config m_config;
+  std::vector<wxImage> m_images;
   MedocDb m_medocDb;
   
   wxTextCtrl * m_title;

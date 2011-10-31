@@ -16,6 +16,9 @@ public:
   
   struct File
   {
+    File(const std::string & image,
+         const std::string & thumb);
+
     std::string m_image;
     std::string m_thumb;
   };
