@@ -52,6 +52,38 @@ namespace
     std::vector<wxString> & m_languages;
   };
 
+  class CheckUser : public pqxx::transactor<pqxx::transaction<> >
+  {
+  public:
+    CheckUser(const wxString & account,
+              const wxString & key,
+              bool & isValid):
+      m_account(account),
+      m_key(key),
+      m_isValid(isValid)
+    {
+    }
+
+    void operator()(argument_type & T)
+    {
+      pqxx::result result = T.prepared("checkUser")(m_account)(m_key).exec();
+      m_isValid = result[0][0].as<bool>();
+    }
+    
+    static void prepare(pqxx::connection & dbConn)
+    {
+      dbConn.prepare
+        ("checkUser", "select * from checkUser($1, $2)")
+        ("text", pqxx::prepare::treat_string)
+        ("text", pqxx::prepare::treat_string);
+    }
+
+  private:
+    wxString m_account;
+    wxString m_key;
+    bool & m_isValid;
+  };
+
   class CreateDocument : public pqxx::transactor<pqxx::transaction<> >
   {
   public:
@@ -90,18 +122,18 @@ namespace
 
     static void prepare(pqxx::connection & dbConn)
     {
-      dbConn.prepare("createDocument", "select * from createDocument()")
+      dbConn.prepare("createDocument", "select * from createDocument($1, $2, $3)")
         ("text", pqxx::prepare::treat_string)
         ("date", pqxx::prepare::treat_string)
         ("text", pqxx::prepare::treat_string);
-      dbConn.prepare("addFile", "select * from addFile()")
+      dbConn.prepare("addFile", "select * from addFile($1, $2, $3, $4, $5, $6)")
         ("integer", pqxx::prepare::treat_direct)
         ("text", pqxx::prepare::treat_string)
         ("regconfig", pqxx::prepare::treat_string)
         ("bytea", pqxx::prepare::treat_binary)
         ("bytea", pqxx::prepare::treat_binary)
         ("text", pqxx::prepare::treat_string);
-    }    
+    }
 
   private:
     wxString m_title;
@@ -125,6 +157,7 @@ MedocDb::MedocDb(const DbConfig & dbConfig)
         << _("password=") << dbConfig.getPassword();
     m_dbConn.reset(new pqxx::connection(str.mb_str(wxConvUTF8)));
     GetLanguages::prepare(*m_dbConn);
+    CheckUser::prepare(*m_dbConn);
     CreateDocument::prepare(*m_dbConn);
   }
   catch(const pqxx::pqxx_exception & e)
@@ -138,6 +171,16 @@ std::vector<wxString> MedocDb::getLanguages() const
   std::vector<wxString> languages;
   m_dbConn->perform(GetLanguages(languages));
   return languages;
+}
+
+bool MedocDb::checkUser(const wxString & account,
+                        const wxString & key) const
+{
+  bool isValid;
+  m_dbConn->perform(CheckUser(account,
+                              key,
+                              isValid));
+  return isValid;
 }
 
 void MedocDb::createDocument(const wxString & title,

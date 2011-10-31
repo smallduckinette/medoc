@@ -11,13 +11,15 @@ public:
            int port,
            const wxString & dbName,
            const wxString & login,
-           const wxString & password);
+           const wxString & password,
+           const wxString & account);
            
   wxString getHost() const;
   int getPort() const;
   wxString getDbName() const;
   wxString getLogin() const;
-  wxString getPassword() const;  
+  wxString getPassword() const;
+  wxString getAccount() const;
 
 private:
   wxString m_host;
@@ -25,6 +27,7 @@ private:
   wxString m_dbName;
   wxString m_login;
   wxString m_password;
+  wxString m_account;
 };
 
 class Config

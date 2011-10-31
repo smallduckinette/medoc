@@ -16,7 +16,8 @@ DatabaseDlg::DatabaseDlg(wxWindow * parent):
   m_port(new wxTextCtrl(this, wxID_NEW, _("5432"))),
   m_name(new wxTextCtrl(this, wxID_NEW, _("medoc"))),
   m_login(new wxTextCtrl(this, wxID_NEW)),
-  m_password(new wxTextCtrl(this, wxID_NEW, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PASSWORD))
+  m_password(new wxTextCtrl(this, wxID_NEW, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PASSWORD)),
+  m_account(new wxTextCtrl(this, wxID_NEW))
 {
   wxGridSizer * grid = new wxGridSizer(2);
   grid->Add(new wxStaticText(this, wxID_NEW, _("Db host")), 0, wxALIGN_CENTER_VERTICAL);
@@ -29,6 +30,8 @@ DatabaseDlg::DatabaseDlg(wxWindow * parent):
   grid->Add(m_login, 0, wxEXPAND);
   grid->Add(new wxStaticText(this, wxID_NEW, _("Db password")), 0, wxALIGN_CENTER_VERTICAL);
   grid->Add(m_password, 0, wxEXPAND);
+  grid->Add(new wxStaticText(this, wxID_NEW, _("Medoc account")), 0, wxALIGN_CENTER_VERTICAL);
+  grid->Add(m_account, 0, wxEXPAND);
 
   wxBoxSizer * vbox = new wxBoxSizer(wxVERTICAL);
   vbox->Add(grid, 0, wxEXPAND | wxALL, 7);
@@ -52,7 +55,8 @@ DbConfig DatabaseDlg::getDbConfig() const
                   port,
                   m_name->GetValue(),
                   m_login->GetValue(),
-                  m_password->GetValue());
+                  m_password->GetValue(),
+                  m_account->GetValue());
 }
 
 void DatabaseDlg::onOk(wxCommandEvent &)

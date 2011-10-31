@@ -18,8 +18,14 @@ protected:
       ID_BUTTON_EXPORT = wxID_HIGHEST + 1,
       ID_BUTTON_CANCEL
     };
+  
+  void onExport(wxCommandEvent &);
+  void onCancel(wxCommandEvent &);
 
+  DECLARE_EVENT_TABLE();
+  
 private:
+  Config m_config;
   MedocDb m_medocDb;
   
   wxTextCtrl * m_title;

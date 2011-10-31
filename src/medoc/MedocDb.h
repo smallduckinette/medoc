@@ -11,6 +11,8 @@ public:
   MedocDb(const DbConfig & dbConfig);
   
   std::vector<wxString> getLanguages() const;
+  bool checkUser(const wxString & account,
+                 const wxString & key) const;
   
   struct File
   {

@@ -3,9 +3,16 @@
 #include "MedocDb.h"
 
 
+BEGIN_EVENT_TABLE(ExportDbDlg, wxDialog)
+  EVT_BUTTON(ID_BUTTON_EXPORT, ExportDbDlg::onExport)
+  EVT_BUTTON(ID_BUTTON_CANCEL, ExportDbDlg::onCancel)
+END_EVENT_TABLE()
+
+
 ExportDbDlg::ExportDbDlg(wxWindow * parent,
                          const Config & config):
   wxDialog(parent, wxID_NEW, _("Export to database")),
+  m_config(config),
   m_medocDb(config.getDbConfig()),
   m_title(new wxTextCtrl(this, wxID_NEW)),
   m_calendar(new wxCalendarCtrl(this, wxID_NEW)),
@@ -37,4 +44,45 @@ ExportDbDlg::ExportDbDlg(wxWindow * parent,
 
   SetSizer(vbox);
   vbox->SetSizeHints(this);
+}
+
+void ExportDbDlg::onExport(wxCommandEvent &)
+{
+  if(m_title->GetValue().IsEmpty())
+  {
+    wxMessageDialog message(this, _("Please enter a title for your document"));
+    message.ShowModal();    
+  }
+  else if(m_languages->GetSelection() == wxNOT_FOUND)
+  {
+    wxMessageDialog message(this, _("Please select a language for your document"));
+    message.ShowModal();
+  }
+  else
+  {
+    wxPasswordEntryDialog passwordDlg(this, _T("Please enter your passphrase"));
+    if(passwordDlg.ShowModal() == wxID_OK)
+    {
+      if(m_medocDb.checkUser(m_config.getDbConfig().getAccount(),
+                             passwordDlg.GetValue()))
+      {
+        m_medocDb.createDocument(m_title->GetValue(),
+                                 m_calendar->GetDate(),
+                                 m_languages->GetStringSelection(),
+                                 std::vector<MedocDb::File>(),
+                                 passwordDlg.GetValue());
+      }
+      else
+      {
+        wxMessageDialog message(this, _("Bad key"));
+        message.ShowModal();        
+      }
+    }
+    EndModal(wxID_OK);
+  }
+}
+
+void ExportDbDlg::onCancel(wxCommandEvent &)
+{
+  EndModal(wxID_CANCEL);
 }

@@ -9,12 +9,14 @@ DbConfig::DbConfig(const wxString & host,
                    int port,
                    const wxString & dbName,
                    const wxString & login,
-                   const wxString & password):
+                   const wxString & password,
+                   const wxString & account):
   m_host(host),
   m_port(port),
   m_dbName(dbName),
   m_login(login),
-  m_password(password)
+  m_password(password),
+  m_account(account)
 {
 }
 
@@ -41,6 +43,11 @@ wxString DbConfig::getLogin() const
 wxString DbConfig::getPassword() const
 {
   return m_password;
+}
+
+wxString DbConfig::getAccount() const
+{
+  return m_account;
 }
 
 void Config::setDbConfig(const DbConfig & dbConfig)
