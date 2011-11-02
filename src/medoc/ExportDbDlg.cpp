@@ -96,10 +96,12 @@ std::vector<MedocDb::File> ExportDbDlg::processImages() const
   
   for(const wxImage & image : m_images)
   {
+    double ratio = std::max(image.GetHeight() / 80, image.GetWidth() / 80);
+    
     files.push_back
       (MedocDb::File
        (processImage(image), 
-        processImage(image.Scale(80, 80, wxIMAGE_QUALITY_HIGH))));
+        processImage(image.Scale(image.GetWidth() / ratio, image.GetHeight() / ratio, wxIMAGE_QUALITY_HIGH))));
   }
   
   return files;
