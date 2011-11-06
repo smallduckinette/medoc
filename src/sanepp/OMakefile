@@ -1,5 +1,0 @@
-LIBFILES[] = $(removesuffix $(glob *.cpp))
-
-LIB = ../lib/libsanepp
-
-.DEFAULT: $(StaticCLibrary $(LIB), $(LIBFILES))

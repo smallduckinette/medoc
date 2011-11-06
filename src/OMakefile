@@ -1,1 +1,1 @@
-.SUBDIRS:medoc sanepp saneppclient
+.SUBDIRS:medoc
