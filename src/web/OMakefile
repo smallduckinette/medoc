@@ -1,0 +1,20 @@
+OCAMLFLAGS = -thread
+
+FILES[] =
+	$(removesuffix $(glob *.ml))
+
+USE_OCAMLFIND = true
+
+BYTE_ENABLED = true
+NATIVE_ENABLED = true
+
+OCAMLPACKS[] =
+	calendar
+	ocsigen
+	postgresql
+	threads
+	unix
+
+OCamlLibrary(../lib/medoc, $(FILES))
+
+.DEFAULT: ../lib/medoc.cma

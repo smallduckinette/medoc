@@ -1,1 +1,1 @@
-.SUBDIRS:medoc
+.SUBDIRS:medoc web

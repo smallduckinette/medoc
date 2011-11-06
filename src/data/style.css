@@ -1,0 +1,154 @@
+body
+{
+    margin:0px;
+}
+
+div.mainframe
+{
+    width:80%;
+    height:100%;
+    margin-left:100px;
+    margin-right:100px;
+    margin-bottom:50px;
+}
+
+#header
+{
+    float:right;
+    background-color:#b0c4de;
+    -moz-border-radius-bottomleft:10px;
+    -moz-border-radius-bottomright:10px;
+    -webkit-border-bottom-left-radius:10px;
+    -webkit-border-bottom-right-radius:10px;
+    border-left: 1px solid #ff0000;
+    border-right: 1px solid #ff0000;
+    border-bottom: 1px solid #ff0000;
+}
+
+div.header
+{
+    text-align:right;
+    float:right;
+    padding-left:10px;
+    padding-right:10px;
+    margin:5px;
+    margin-bottom:10px;
+}
+
+div.zone
+{
+    background-color:#b0c4de;
+    -moz-border-radius:10px;
+    -webkit-border-radius:10px;
+    border: 1px solid #ff0000;    
+}
+
+div.subzone
+{
+    -moz-border-radius:10px;
+    -webkit-border-radius:10px;
+    border: 1px solid #ff0000;    
+    margin:5px;
+    padding:5px;
+}
+
+#stats
+{
+    padding:5px;
+    text-align:center;
+    margin-top:10px;
+    margin-right:200px;
+}
+
+#toolbar
+{
+    clear:both;
+    margin:0px;
+    padding:0px;
+    list-style-type:none;
+}
+
+li
+{
+    display:inline;
+}
+
+a.menu
+{
+    -moz-border-radius:10px;
+    -webkit-border-radius:10px;
+    border: 1px solid #ff0000;
+    width:180px;
+    clear:both;
+    float:right;
+    padding: 5px;
+    margin-bottom:5px;
+    text-decoration:none;
+    color:black;    
+}
+
+a.tool
+{
+    background-color:#b0c4de;
+}
+
+a.tool:hover
+{
+    background-color:#b0c4ff;
+}
+
+a.tag
+{
+    background-color:#ffc4de;
+}
+
+a.tag:hover
+{
+    background-color:#ffc4ff;
+}
+
+a.minitag
+{
+    -moz-border-radius:10px;
+    -webkit-border-radius:10px;
+    border: 1px solid #ff0000;
+    width:180px;
+    padding: 5px;
+    margin-bottom:5px;
+    text-decoration:none;
+    color:black;   
+    background-color:#ffc4de;
+}
+
+a.minitag:hover
+{
+    background-color:#ffc4ff;
+}
+
+#main
+{
+    margin-right:200px;
+    clear:left;
+    padding: 20px;
+}
+
+#search_box2
+{
+    border:none;
+    font-size: 1.2em;
+    margin-right:0px;
+    height: 30px;
+    padding: 8px 5px 0;
+}
+
+#search_box2:focus
+{
+    background-color:#eeeeff;
+}
+
+#search_button2
+{
+    border:none;
+    width: 38px;
+    height: 38px;
+}
