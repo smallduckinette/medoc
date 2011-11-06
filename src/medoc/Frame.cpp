@@ -23,6 +23,7 @@
 
 
 BEGIN_EVENT_TABLE(Frame, wxFrame)
+  EVT_MENU(ID_FILE_CLEAR, Frame::onClear)
   EVT_MENU(ID_FILE_QUIT, Frame::onQuit)
   EVT_MENU(ID_IMPORT_FILE, Frame::onImportFile)
   EVT_MENU(ID_IMPORT_DEVICE, Frame::onImportDevice)
@@ -43,6 +44,8 @@ Frame::Frame():
 {
   // Menus
   wxMenu * menuFile = new wxMenu;
+  menuFile->Append(ID_FILE_CLEAR, _("&Clear"));
+  menuFile->AppendSeparator();
   menuFile->Append(ID_FILE_QUIT, _("E&xit"));
   
   wxMenu * menuImport = new wxMenu;
@@ -70,6 +73,12 @@ Frame::Frame():
   // Show
   SetSizer(sizer);
   Show(true);
+}
+
+void Frame::onClear(wxCommandEvent &)
+{
+  m_imageList->Clear();
+  m_imagePanel->clear();
 }
 
 void Frame::onQuit(wxCommandEvent &)
@@ -160,7 +169,10 @@ void Frame::onConfigureDatabase(wxCommandEvent &)
 
 void Frame::onImageSelected(wxCommandEvent & event)
 {
-  m_imagePanel->setImage(static_cast<PageInfo *>(event.GetClientObject())->getImage());  
+  if(event.IsSelection())
+  {
+    m_imagePanel->setImage(static_cast<PageInfo *>(event.GetClientObject())->getImage());  
+  }
 }
 
 void Frame::onImageSelected(int index)

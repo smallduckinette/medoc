@@ -24,6 +24,7 @@ public:
   ImagePanel(wxWindow * parent);
   ImagePanel(wxWindow * parent, const wxImage & image);
   
+  void clear();
   void setImage(const wxImage & image);
 
 protected:

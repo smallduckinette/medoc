@@ -30,7 +30,8 @@ public:
 protected:
   enum
     {
-      ID_FILE_QUIT = wxID_HIGHEST + 1,
+      ID_FILE_CLEAR = wxID_HIGHEST + 1,
+      ID_FILE_QUIT,
       ID_IMPORT_FILE,
       ID_IMPORT_DEVICE,
       ID_EXPORT_FILE,
@@ -39,6 +40,7 @@ protected:
       ID_IMAGE_LIST
     };
   
+  void onClear(wxCommandEvent &);
   void onQuit(wxCommandEvent &);
   void onImportFile(wxCommandEvent &);
   void onImportDevice(wxCommandEvent &);
