@@ -19,17 +19,21 @@ public:
 protected:
   enum
     {
-      ID_BUTTON_SCAN = wxID_HIGHEST + 1,
+      ID_BUTTON_SCAN_MANY = wxID_HIGHEST + 1,
+      ID_BUTTON_SCAN_SINGLE,
       ID_BUTTON_CANCEL
     };
   
-  void onScan(wxCommandEvent &);
+  void onScanMany(wxCommandEvent &);
+  void onScanSingle(wxCommandEvent &);
   void onCancel(wxCommandEvent &);
   
 
   DECLARE_EVENT_TABLE();
-
+  
 private:
+  void onScan(bool many);
+  
   SANE_Handle m_handle;
   std::vector<wxImage> m_images;
   

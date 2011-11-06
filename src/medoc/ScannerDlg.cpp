@@ -7,7 +7,8 @@
 #include "ScannerOption.h"
 
 BEGIN_EVENT_TABLE(ScannerDlg, wxDialog)
-  EVT_BUTTON(ID_BUTTON_SCAN, ScannerDlg::onScan)
+  EVT_BUTTON(ID_BUTTON_SCAN_MANY, ScannerDlg::onScanMany)
+  EVT_BUTTON(ID_BUTTON_SCAN_SINGLE, ScannerDlg::onScanSingle)
   EVT_BUTTON(ID_BUTTON_CANCEL, ScannerDlg::onCancel)
 END_EVENT_TABLE()
 
@@ -55,9 +56,13 @@ ScannerDlg::ScannerDlg(wxWindow * parent):
                 m_options.end(),
                 std::bind(&ScannerOption::append, std::placeholders::_1, gridSizer));
   wxBoxSizer * hbox = new wxBoxSizer(wxHORIZONTAL);
-  hbox->Add(new wxButton(this, ID_BUTTON_SCAN, _T("Scan")),
+  hbox->Add(new wxButton(this, ID_BUTTON_SCAN_MANY, _T("Scan many")),
             1, 
             wxEXPAND | wxRIGHT, 
+            3);
+  hbox->Add(new wxButton(this, ID_BUTTON_SCAN_SINGLE, _T("Scan single")),
+            1, 
+            wxEXPAND | wxLEFT | wxRIGHT, 
             3);
   hbox->Add(new wxButton(this, ID_BUTTON_CANCEL, _T("Cancel")),
             1, 
@@ -83,7 +88,17 @@ ScannerDlg::~ScannerDlg()
   sane_exit();
 }
 
-void ScannerDlg::onScan(wxCommandEvent &)
+void ScannerDlg::onScanMany(wxCommandEvent &)
+{
+  onScan(true);
+}
+
+void ScannerDlg::onScanSingle(wxCommandEvent &)
+{
+  onScan(false);
+}
+
+void ScannerDlg::onScan(bool many)
 {
   for(auto option : m_options)
   {
@@ -91,8 +106,8 @@ void ScannerDlg::onScan(wxCommandEvent &)
   }
 
   int imageNb = 0;
-
-  while(sane_start(m_handle) == SANE_STATUS_GOOD)
+  
+  while(sane_start(m_handle) == SANE_STATUS_GOOD && (many || imageNb == 0))
   {
     ++imageNb;
     SANE_Parameters parameters;
