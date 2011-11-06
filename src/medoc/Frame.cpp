@@ -82,6 +82,7 @@ void Frame::onImportFile(wxCommandEvent &)
       m_imageList->Append(names.Item(i), new PageInfo(paths.Item(i)));
     }
   }
+  Layout();
 }
 
 void Frame::onImportDevice(wxCommandEvent &)
@@ -102,6 +103,7 @@ void Frame::onImportDevice(wxCommandEvent &)
     wxMessageDialog message(this, wxString(e.what(), wxConvUTF8));
     message.ShowModal();
   }
+  Layout();
 }
 
 void Frame::onExportDb(wxCommandEvent &)
