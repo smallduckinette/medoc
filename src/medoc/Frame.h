@@ -34,10 +34,11 @@ protected:
   void onImageSelected(wxCommandEvent & event);
   
   DECLARE_EVENT_TABLE();
-
+  
 private:
+  void onImageSelected(int index);
   std::vector<wxImage> getImages() const;
-
+  
   wxListBox * m_imageList;
   ImagePanel * m_imagePanel;
   Config m_config;

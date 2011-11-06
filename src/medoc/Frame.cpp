@@ -79,7 +79,7 @@ void Frame::onImportFile(wxCommandEvent &)
     assert(names.GetCount() == paths.GetCount());
     for(size_t i = 0; i < names.GetCount(); ++i)
     {
-      m_imageList->Append(names.Item(i), new PageInfo(paths.Item(i)));
+      onImageSelected(m_imageList->Append(names.Item(i), new PageInfo(paths.Item(i))));
     }
   }
   Layout();
@@ -94,7 +94,7 @@ void Frame::onImportDevice(wxCommandEvent &)
     {
       for(const wxImage & image : scannerDlg.getImages())
       {
-        m_imageList->Append(_("Scanned image"), new PageInfo(image));
+        onImageSelected(m_imageList->Append(_("Scanned image"), new PageInfo(image)));
       }
     }
   }
@@ -145,7 +145,13 @@ void Frame::onConfigureDatabase(wxCommandEvent &)
 
 void Frame::onImageSelected(wxCommandEvent & event)
 {
-  m_imagePanel->setImage(static_cast<PageInfo *>(event.GetClientObject())->getImage());
+  m_imagePanel->setImage(static_cast<PageInfo *>(event.GetClientObject())->getImage());  
+}
+
+void Frame::onImageSelected(int index)
+{
+  m_imageList->SetSelection(index);
+  m_imagePanel->setImage(static_cast<PageInfo *>(m_imageList->GetClientObject(index))->getImage());  
 }
 
 std::vector<wxImage> Frame::getImages() const
