@@ -13,20 +13,22 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef __MEDOC_PAGEINFO_H__
-#define __MEDOC_PAGEINFO_H__
+#ifndef __MEDOC_PDFIMAGEHANDLER_H__
+#define __MEDOC_PDFIMAGEHANDLER_H__
 
 #include <wx/wx.h>
 
-class PageInfo : public wxClientData
+class PdfImageHandler : public wxImageHandler
 {
 public:
-  PageInfo(const wxImage & image);
-  
-  wxImage getImage() const;
+  PdfImageHandler();
 
-private:
-  wxImage m_image;
+  virtual int GetImageCount(wxInputStream & stream);
+  virtual bool LoadFile(wxImage * image, wxInputStream & stream, bool verbose=true, int index=-1);
+  virtual bool SaveFile(wxImage * image, wxOutputStream & stream, bool verbose=true);
+  
+protected:
+  bool DoCanRead(wxInputStream & stream);
 };
 
 #endif

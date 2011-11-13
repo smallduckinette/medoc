@@ -1,4 +1,4 @@
-CXXFLAGS += -Wall -Werror -ansi $(shell wx-config --cxxflags) $(shell sane-config --cflags) -std=gnu++0x -ggdb -I.. 
+CXXFLAGS += -Wall -Werror -ansi -std=gnu++0x -ggdb -I.. 
 
 SRC_TREE[] =
 	$(removeprefix $(absname src), $(subdirs src))

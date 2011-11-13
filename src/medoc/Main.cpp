@@ -16,6 +16,7 @@
 #include <wx/wx.h>
 
 #include "Frame.h"
+#include "PdfImageHandler.h"
 
 class App : public wxApp
 {
@@ -27,6 +28,7 @@ IMPLEMENT_APP(App);
 bool App::OnInit()
 {
   wxInitAllImageHandlers();
+  wxImage::AddHandler(new PdfImageHandler);
   
   SetTopWindow(new Frame());
   

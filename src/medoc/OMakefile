@@ -1,4 +1,6 @@
-LDFLAGS += $(shell wx-config --libs) $(shell sane-config --ldflags) $(shell sane-config --libs) -lpqxx
+CXXFLAGS += $(shell wx-config --cxxflags) $(shell sane-config --cflags) $(shell Magick++-config --cppflags)
+
+LDFLAGS += $(shell wx-config --libs) $(shell sane-config --ldflags) $(shell sane-config --libs) $(shell Magick++-config --ldflags) $(shell Magick++-config --libs) -lpqxx
 
 FILES[] =
 	$(removesuffix $(glob *.cpp))

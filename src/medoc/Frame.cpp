@@ -13,6 +13,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+
 #include "Frame.h"
 
 #include "ImagePanel.h"
@@ -103,7 +104,11 @@ void Frame::onImportFile(wxCommandEvent &)
     assert(names.GetCount() == paths.GetCount());
     for(size_t i = 0; i < names.GetCount(); ++i)
     {
-      onImageSelected(m_imageList->Append(names.Item(i), new PageInfo(paths.Item(i))));
+      int imageCount = wxImage::GetImageCount(paths.Item(i));
+      for(int imageIndex = 0; imageIndex < imageCount; ++imageIndex)
+      {
+        onImageSelected(m_imageList->Append(names.Item(i), new PageInfo(wxImage(paths.Item(i), wxBITMAP_TYPE_ANY, imageIndex))));
+      }
     }
   }
   Layout();
