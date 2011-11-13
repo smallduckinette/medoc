@@ -30,6 +30,10 @@ BEGIN_EVENT_TABLE(Frame, wxFrame)
   EVT_MENU(ID_IMPORT_DEVICE, Frame::onImportDevice)
   EVT_MENU(ID_EXPORT_DB, Frame::onExportDb)
   EVT_MENU(ID_CONFIG_DB, Frame::onConfigureDatabase)
+  EVT_MENU(ID_VIEW_ZOOMIN, Frame::onZoomIn)
+  EVT_MENU(ID_VIEW_ZOOMOUT, Frame::onZoomOut)
+  EVT_MENU(ID_VIEW_ZOOMFIT, Frame::onZoomFit)
+  EVT_MENU(ID_VIEW_ZOOMRESET, Frame::onZoomReset)
   EVT_LISTBOX(ID_IMAGE_LIST, Frame::onImageSelected)
 END_EVENT_TABLE()
 
@@ -58,12 +62,19 @@ Frame::Frame():
   menuExport->Append(ID_EXPORT_DB, _("To &database..."));
   menuExport->AppendSeparator();
   menuExport->Append(ID_CONFIG_DB, _("&Configure database...&"));
+
+  wxMenu * menuView = new wxMenu;
+  menuView->Append(ID_VIEW_ZOOMIN, _("Zoom &in"));
+  menuView->Append(ID_VIEW_ZOOMOUT, _("Zoom &out"));
+  menuView->Append(ID_VIEW_ZOOMFIT, _("Zoom to &fit"));
+  menuView->Append(ID_VIEW_ZOOMRESET, _("&Reset zoom"));
   
   wxMenuBar * menuBar = new wxMenuBar;
   menuBar->Append(menuFile, _("&File"));
   menuBar->Append(menuImport, _("&Import"));
   menuBar->Append(menuExport, _("&Export"));
-
+  menuBar->Append(menuView, _("&View"));
+  
   SetMenuBar(menuBar);
   
   // Frame
@@ -170,6 +181,26 @@ void Frame::onConfigureDatabase(wxCommandEvent &)
   {
     m_config.setDbConfig(databaseDlg.getDbConfig());
   }
+}
+
+void Frame::onZoomIn(wxCommandEvent &)
+{
+  m_imagePanel->zoomIn();
+}
+
+void Frame::onZoomOut(wxCommandEvent &)
+{
+  m_imagePanel->zoomOut();
+}
+
+void Frame::onZoomFit(wxCommandEvent &)
+{
+  m_imagePanel->zoomFit();
+}
+
+void Frame::onZoomReset(wxCommandEvent &)
+{
+  m_imagePanel->resetZoom();
 }
 
 void Frame::onImageSelected(wxCommandEvent & event)

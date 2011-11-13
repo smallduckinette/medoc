@@ -22,16 +22,21 @@ class ImagePanel : public wxScrolledWindow
 {
 public:
   ImagePanel(wxWindow * parent);
-  ImagePanel(wxWindow * parent, const wxImage & image);
   
   void clear();
   void setImage(const wxImage & image);
 
+  void zoomIn();
+  void zoomOut();
+  void zoomFit();
+  void resetZoom();
+
 protected:
   void OnDraw(wxDC & dc);
-
+  
 private:
-  wxBitmap m_image;
+  wxImage m_image;
+  wxBitmap m_bitmap;
 };
 
 #endif

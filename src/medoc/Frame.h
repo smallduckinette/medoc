@@ -37,7 +37,11 @@ protected:
       ID_EXPORT_FILE,
       ID_EXPORT_DB,
       ID_CONFIG_DB,
-      ID_IMAGE_LIST
+      ID_IMAGE_LIST,
+      ID_VIEW_ZOOMIN,
+      ID_VIEW_ZOOMOUT,
+      ID_VIEW_ZOOMFIT,
+      ID_VIEW_ZOOMRESET
     };
   
   void onClear(wxCommandEvent &);
@@ -47,6 +51,10 @@ protected:
   void onExportFile(wxCommandEvent &);
   void onExportDb(wxCommandEvent &);
   void onConfigureDatabase(wxCommandEvent &);
+  void onZoomIn(wxCommandEvent &);
+  void onZoomOut(wxCommandEvent &);
+  void onZoomFit(wxCommandEvent &);
+  void onZoomReset(wxCommandEvent &);
 
   void onImageSelected(wxCommandEvent & event);
   
