@@ -35,7 +35,10 @@ protected:
   void OnDraw(wxDC & dc);
   
 private:
+  void setBitmap();
+
   wxImage m_image;
+  double m_scale;
   wxBitmap m_bitmap;
 };
 

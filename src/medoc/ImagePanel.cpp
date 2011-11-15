@@ -17,7 +17,8 @@
 
 
 ImagePanel::ImagePanel(wxWindow * parent):
-  wxScrolledWindow(parent)
+  wxScrolledWindow(parent),
+  m_scale(1)
 {
   SetScrollRate(10, 10);
 }
@@ -38,10 +39,14 @@ void ImagePanel::setImage(const wxImage & image)
 
 void ImagePanel::zoomIn()
 {
+  m_scale *= 1.1;
+  setBitmap();
 }
 
 void ImagePanel::zoomOut()
 {
+  m_scale *= 0.9;
+  setBitmap();
 }
 
 void ImagePanel::zoomFit()
@@ -49,18 +54,15 @@ void ImagePanel::zoomFit()
   if(m_image.GetWidth() > 0)
   {
     double width = GetSize().GetWidth();
-    double scale = width / m_image.GetWidth();
-    wxImage scaledImage(m_image);
-    scaledImage.Rescale(m_image.GetWidth() * scale, 
-                        m_image.GetHeight() * scale,
-                        wxIMAGE_QUALITY_HIGH);
-    m_bitmap = wxBitmap(scaledImage);
-    Refresh();
+    m_scale = width / m_image.GetWidth();
+    setBitmap();
   }
 }
 
 void ImagePanel::resetZoom()
 {
+  m_scale = 1;
+  setBitmap();
 }
 
 void ImagePanel::OnDraw(wxDC & dc)
@@ -68,3 +70,13 @@ void ImagePanel::OnDraw(wxDC & dc)
   dc.DrawBitmap(m_bitmap, 0, 0, false);
   SetVirtualSize(m_bitmap.GetWidth(), m_image.GetHeight());
 }
+
+void ImagePanel::setBitmap()
+{
+  wxImage scaledImage(m_image);
+  scaledImage.Rescale(m_image.GetWidth() * m_scale, 
+                      m_image.GetHeight() * m_scale,
+                      wxIMAGE_QUALITY_HIGH);
+  m_bitmap = wxBitmap(scaledImage);
+  Refresh();
+}  
