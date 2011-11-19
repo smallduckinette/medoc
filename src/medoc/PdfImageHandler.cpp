@@ -15,6 +15,7 @@
 
 #include "PdfImageHandler.h"
 
+#include <sstream>
 #include <Magick++.h> 
 #include <wx/mstream.h>
 
@@ -22,10 +23,13 @@ namespace
 {
   template <class Container>
   void readImages(Container * sequence,
-                  const Magick::Blob & blob)
+                  const Magick::Blob & blob,
+                  int dpi)
   {
     MagickCore::ImageInfo * imageInfo = MagickCore::CloneImageInfo(0);
-    imageInfo->density = strdup("150x150");
+    std::ostringstream str;
+    str << dpi << "x" << dpi;
+    imageInfo->density = strdup(str.str().c_str());
     MagickCore::ExceptionInfo exceptionInfo;
     MagickCore::GetExceptionInfo( &exceptionInfo );
     MagickCore::Image *images = MagickCore::BlobToImage( imageInfo,
@@ -37,7 +41,7 @@ namespace
     MagickCore::DestroyExceptionInfo( &exceptionInfo );
   }
 
-  std::list<Magick::Image> loadImages(wxInputStream & stream)
+  std::list<Magick::Image> loadImages(wxInputStream & stream, int dpi)
   {
     wxFileOffset offset = stream.TellI();
     wxMemoryOutputStream buffer;
@@ -49,12 +53,13 @@ namespace
        buffer.GetOutputStreamBuffer()->GetBufferSize());
     
     std::list<Magick::Image> images;
-    ::readImages(&images, blob);
+    ::readImages(&images, blob, dpi);
     return images;
   }
 }
 
-PdfImageHandler::PdfImageHandler()
+PdfImageHandler::PdfImageHandler():
+  m_dpi(150)
 {
   SetName(_("PdfImageHanlder"));
   SetExtension(_("pdf"));
@@ -62,12 +67,12 @@ PdfImageHandler::PdfImageHandler()
 
 int PdfImageHandler::GetImageCount(wxInputStream & stream)
 {
-  return loadImages(stream).size();
+  return loadImages(stream, m_dpi).size();
 }
 
 bool PdfImageHandler::LoadFile(wxImage * image, wxInputStream & stream, bool verbose, int index)
 {
-  std::list<Magick::Image> images = loadImages(stream);
+  std::list<Magick::Image> images = loadImages(stream, m_dpi);
   std::list<Magick::Image>::iterator it = images.begin();
   if(index != -1)
   {
@@ -91,6 +96,11 @@ bool PdfImageHandler::LoadFile(wxImage * image, wxInputStream & stream, bool ver
 bool PdfImageHandler::SaveFile(wxImage * image, wxOutputStream & stream, bool verbose)
 {
   return false;
+}
+
+void PdfImageHandler::setDpi(int dpi)
+{
+  m_dpi = dpi;
 }
 
 bool PdfImageHandler::DoCanRead(wxInputStream & stream)

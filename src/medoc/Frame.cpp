@@ -16,11 +16,14 @@
 
 #include "Frame.h"
 
+#include <wx/config.h>
+
 #include "ImagePanel.h"
 #include "PageInfo.h"
 #include "ScannerDlg.h"
 #include "ExportDbDlg.h"
 #include "OptionsDlg.h"
+#include "PdfImageHandler.h"
 
 
 BEGIN_EVENT_TABLE(Frame, wxFrame)
@@ -105,11 +108,17 @@ void Frame::onQuit(wxCommandEvent &)
 
 void Frame::onImportFile(wxCommandEvent &)
 {
+  if(PdfImageHandler * pdfImageHandler = dynamic_cast<PdfImageHandler *>(wxImage::FindHandler(_("PdfImageHanlder"))))
+  {
+    wxConfig config(_("medoc"));
+    pdfImageHandler->setDpi(config.Read(_("PdfDpi"), 150));
+  }
+
   wxFileDialog fileDialog(this,
                           _("Import file..."),
                           _(""),
                           _(""),
-                          _("Image files (*.jpg;*.bmp;*.png)|*.jpg;*.JPG;*.bmp;*.BMP;*.png;*.PNG|All files (*.*)|*.*"),
+                          _("Image files (*.jpg;*.bmp;*.png;*.pdf)|*.jpg;*.JPG;*.bmp;*.BMP;*.png;*.PNG;*.pdf;*.PDF|All files (*.*)|*.*"),
                           wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_MULTIPLE);
   if(fileDialog.ShowModal() == wxID_OK)
   {

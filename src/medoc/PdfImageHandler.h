@@ -26,9 +26,13 @@ public:
   virtual int GetImageCount(wxInputStream & stream);
   virtual bool LoadFile(wxImage * image, wxInputStream & stream, bool verbose=true, int index=-1);
   virtual bool SaveFile(wxImage * image, wxOutputStream & stream, bool verbose=true);
+
+  void setDpi(int dpi);
   
 protected:
   bool DoCanRead(wxInputStream & stream);
+
+  int m_dpi;
 };
 
 #endif
