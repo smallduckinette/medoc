@@ -21,10 +21,12 @@
 #include "ScannerDlg.h"
 #include "DatabaseDlg.h"
 #include "ExportDbDlg.h"
+#include "OptionsDlg.h"
 
 
 BEGIN_EVENT_TABLE(Frame, wxFrame)
   EVT_MENU(ID_FILE_CLEAR, Frame::onClear)
+  EVT_MENU(ID_FILE_OPTIONS, Frame::onOptions)
   EVT_MENU(ID_FILE_QUIT, Frame::onQuit)
   EVT_MENU(ID_IMPORT_FILE, Frame::onImportFile)
   EVT_MENU(ID_IMPORT_DEVICE, Frame::onImportDevice)
@@ -50,6 +52,7 @@ Frame::Frame():
   // Menus
   wxMenu * menuFile = new wxMenu;
   menuFile->Append(ID_FILE_CLEAR, _("&Clear"));
+  menuFile->Append(ID_FILE_OPTIONS, _("&Options"));
   menuFile->AppendSeparator();
   menuFile->Append(ID_FILE_QUIT, _("E&xit"));
   
@@ -91,6 +94,12 @@ void Frame::onClear(wxCommandEvent &)
 {
   m_imageList->Clear();
   m_imagePanel->clear();
+}
+
+void Frame::onOptions(wxCommandEvent &)
+{
+  OptionsDlg optionsDlg(this);
+  optionsDlg.ShowModal();
 }
 
 void Frame::onQuit(wxCommandEvent &)
