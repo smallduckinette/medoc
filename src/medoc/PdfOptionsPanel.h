@@ -17,14 +17,18 @@
 #define __MEDOC_PDFOPTIONSPANEL_H__
 
 #include <wx/wx.h>
+#include <wx/spinctrl.h>
 
 class PdfOptionsPanel : public wxPanel
 {
 public:
   PdfOptionsPanel(wxWindow * parent);
   
+  void loadConfig();
+  void saveConfig();
+
 private:
-  wxTextCtrl * m_dpi;
+  wxSpinCtrl * m_dpi;
 };
 
 #endif

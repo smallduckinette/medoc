@@ -17,15 +17,19 @@
 #define __MEDOC_DATABASEOPTIONSPANEL_H__
 
 #include <wx/wx.h>
+#include <wx/spinctrl.h>
 
 class DatabaseOptionsPanel : public wxPanel
 {
 public:
   DatabaseOptionsPanel(wxWindow * parent);
   
+  void loadConfig();
+  void saveConfig();
+
 private:
   wxTextCtrl * m_host;
-  wxTextCtrl * m_port;
+  wxSpinCtrl * m_port;
   wxTextCtrl * m_name;
   wxTextCtrl * m_login;
   wxTextCtrl * m_password;

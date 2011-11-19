@@ -15,6 +15,10 @@
 
 #include "OptionsDlg.h"
 
+BEGIN_EVENT_TABLE(OptionsDlg, wxDialog)
+  EVT_BUTTON(wxID_OK, OptionsDlg::onOk)
+END_EVENT_TABLE()
+
 OptionsDlg::OptionsDlg(wxWindow * parent):
   wxDialog(parent, wxID_ANY, _("Options")),
   m_options(new wxNotebook(this, wxID_ANY)),
@@ -28,5 +32,15 @@ OptionsDlg::OptionsDlg(wxWindow * parent):
   vbox->Add(m_options, 1, wxEXPAND | wxALL, 7);  
   vbox->Add(CreateStdDialogButtonSizer(wxOK | wxCANCEL), 0, wxEXPAND | wxLEFT | wxRIGHT | wxBOTTOM, 7);
 
+  m_dbPanel->loadConfig();
+  m_pdfPanel->loadConfig();
+
   SetSizer(vbox);
+}
+
+void OptionsDlg::onOk(wxCommandEvent & event)
+{
+  m_dbPanel->saveConfig();
+  m_pdfPanel->saveConfig();
+  event.Skip();
 }

@@ -29,13 +29,9 @@ public:
 protected:
   enum
     {
-      ID_BUTTON_OK = wxID_HIGHEST + 1,
-      ID_BUTTON_CANCEL,
-      ID_BUTTON_TEST
+      ID_BUTTON_TEST = wxID_HIGHEST + 1
     };
   
-  void onOk(wxCommandEvent &);
-  void onCancel(wxCommandEvent &);
   void onTest(wxCommandEvent &);
 
   DECLARE_EVENT_TABLE();  

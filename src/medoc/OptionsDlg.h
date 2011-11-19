@@ -27,6 +27,11 @@ class OptionsDlg : public wxDialog
 public:
   OptionsDlg(wxWindow * parent);
   
+protected:
+  void onOk(wxCommandEvent & event);
+
+  DECLARE_EVENT_TABLE();
+
 private:
   wxNotebook * m_options;
   DatabaseOptionsPanel * m_dbPanel;

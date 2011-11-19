@@ -13,13 +13,23 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include <DatabaseOptionsPanel.h>
+#include "DatabaseOptionsPanel.h"
+
+#include <wx/config.h>
 
 DatabaseOptionsPanel::DatabaseOptionsPanel(wxWindow * parent):
-  wxPanel(parent, wxID_ANY),
-  m_host(new wxTextCtrl(this, wxID_NEW, _("localhost"))),
-  m_port(new wxTextCtrl(this, wxID_NEW, _("5432"))),
-  m_name(new wxTextCtrl(this, wxID_NEW, _("medoc"))),
+  wxPanel(parent, wxID_NEW),
+  m_host(new wxTextCtrl(this, wxID_NEW, wxEmptyString)),
+  m_port(new wxSpinCtrl(this, 
+                        wxID_NEW, 
+                        wxEmptyString, 
+                        wxDefaultPosition,
+                        wxDefaultSize,
+                        wxSP_ARROW_KEYS,
+                        1,
+                        65535,
+                        2345)),
+  m_name(new wxTextCtrl(this, wxID_NEW, wxEmptyString)),
   m_login(new wxTextCtrl(this, wxID_NEW)),
   m_password(new wxTextCtrl(this, wxID_NEW, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PASSWORD)),
   m_account(new wxTextCtrl(this, wxID_NEW))
@@ -43,4 +53,26 @@ DatabaseOptionsPanel::DatabaseOptionsPanel(wxWindow * parent):
   
   SetSizer(vbox);
   vbox->SetSizeHints(this);
+}
+
+void DatabaseOptionsPanel::loadConfig()
+{
+  wxConfig config(_("medoc"));
+  
+  m_host->SetValue(config.Read(_("DbHost"), _("localhost")));
+  m_port->SetValue(config.Read(_("DbPort"), 2345));
+  m_name->SetValue(config.Read(_("DbName"), _("medoc")));
+  m_login->SetValue(config.Read(_("DbLogin"), _("")));
+  m_password->SetValue(config.Read(_("DbPassword"), _("")));
+}
+
+void DatabaseOptionsPanel::saveConfig()
+{
+  wxConfig config(_("medoc"));
+  
+  config.Write(_("DbHost"), m_host->GetValue());
+  config.Write(_("DbPort"), m_port->GetValue());
+  config.Write(_("DbName"), m_name->GetValue());
+  config.Write(_("DbLogin"), m_login->GetValue());
+  config.Write(_("DbPassword"), m_password->GetValue());
 }

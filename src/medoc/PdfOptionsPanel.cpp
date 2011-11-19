@@ -15,9 +15,19 @@
 
 #include "PdfOptionsPanel.h"
 
+#include <wx/config.h>
+
 PdfOptionsPanel::PdfOptionsPanel(wxWindow * parent):
   wxPanel(parent, wxID_NEW),
-  m_dpi(new wxTextCtrl(this, wxID_NEW))
+  m_dpi(new wxSpinCtrl(this, 
+                       wxID_NEW, 
+                       wxEmptyString,
+                       wxDefaultPosition,
+                       wxDefaultSize,
+                       wxSP_ARROW_KEYS,
+                       20,
+                       1000,
+                       150))
 {
   wxGridSizer * grid = new wxGridSizer(2, 3);
   grid->Add(new wxStaticText(this, wxID_NEW, _("Import DBI")), 0, wxALIGN_CENTER_VERTICAL);
@@ -28,4 +38,18 @@ PdfOptionsPanel::PdfOptionsPanel(wxWindow * parent):
   
   SetSizer(vbox);
   vbox->SetSizeHints(this);
+}
+
+void PdfOptionsPanel::loadConfig()
+{
+  wxConfig config(_("medoc"));
+  
+  m_dpi->SetValue(config.Read(_("PdfDpi"), 150));
+}
+
+void PdfOptionsPanel::saveConfig()
+{
+  wxConfig config(_("medoc"));
+
+  config.Write(_("PdfDpi"), m_dpi->GetValue());
 }

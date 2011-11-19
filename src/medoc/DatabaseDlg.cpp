@@ -19,8 +19,6 @@
 
 
 BEGIN_EVENT_TABLE(DatabaseDlg, wxDialog)
-  EVT_BUTTON(ID_BUTTON_OK, DatabaseDlg::onOk)
-  EVT_BUTTON(ID_BUTTON_CANCEL, DatabaseDlg::onCancel)
   EVT_BUTTON(ID_BUTTON_TEST, DatabaseDlg::onTest)
 END_EVENT_TABLE()
 
@@ -51,10 +49,7 @@ DatabaseDlg::DatabaseDlg(wxWindow * parent):
   wxBoxSizer * vbox = new wxBoxSizer(wxVERTICAL);
   vbox->Add(grid, 0, wxEXPAND | wxALL, 7);
   vbox->Add(new wxButton(this, ID_BUTTON_TEST, _("Test connection")), 0, wxEXPAND | wxLEFT | wxRIGHT | wxBOTTOM, 7);
-  wxBoxSizer * hbox = new wxBoxSizer(wxHORIZONTAL);
-  hbox->Add(new wxButton(this, ID_BUTTON_OK, _("Ok")), 1, wxEXPAND | wxRIGHT, 3);
-  hbox->Add(new wxButton(this, ID_BUTTON_CANCEL, _("Cancel")), 1, wxEXPAND | wxLEFT, 3);
-  vbox->Add(hbox, 0, wxEXPAND | wxLEFT | wxRIGHT | wxBOTTOM, 7);
+  vbox->Add(CreateStdDialogButtonSizer(wxOK | wxCANCEL), 0, wxEXPAND | wxLEFT | wxRIGHT | wxBOTTOM, 7);
 
   SetSizer(vbox);
   vbox->SetSizeHints(this);
@@ -72,16 +67,6 @@ DbConfig DatabaseDlg::getDbConfig() const
                   m_login->GetValue(),
                   m_password->GetValue(),
                   m_account->GetValue());
-}
-
-void DatabaseDlg::onOk(wxCommandEvent &)
-{
-  EndModal(wxID_OK);
-}
-
-void DatabaseDlg::onCancel(wxCommandEvent &)
-{
-  EndModal(wxID_CANCEL);
 }
 
 void DatabaseDlg::onTest(wxCommandEvent &)
