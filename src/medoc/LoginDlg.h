@@ -13,36 +13,22 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef __MEDOC_DATABASEDLG_H__
-#define __MEDOC_DATABASEDLG_H__
+#ifndef __MEDOC_LOGINDLG_H__
+#define __MEDOC_LOGINDLG_H__
 
 #include <wx/wx.h>
-#include "Config.h"
 
-class DatabaseDlg : public wxDialog
+class LoginDlg : public wxDialog
 {
 public:
-  DatabaseDlg(wxWindow * parent);
-  
-  DbConfig getDbConfig() const;
-  
-protected:
-  enum
-    {
-      ID_BUTTON_TEST = wxID_HIGHEST + 1
-    };
-  
-  void onTest(wxCommandEvent &);
+  LoginDlg(wxWindow * parent);
 
-  DECLARE_EVENT_TABLE();  
-  
+  wxString getLogin() const;
+  wxString getPassword() const;
+
 private:
-  wxTextCtrl * m_host;
-  wxTextCtrl * m_port;
-  wxTextCtrl * m_name;
   wxTextCtrl * m_login;
   wxTextCtrl * m_password;
-  wxTextCtrl * m_account;
 };
 
 #endif

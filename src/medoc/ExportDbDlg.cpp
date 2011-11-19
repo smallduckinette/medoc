@@ -17,6 +17,7 @@
 
 #include <wx/mstream.h>
 #include "MedocDb.h"
+#include "LoginDlg.h"
 
 
 BEGIN_EVENT_TABLE(ExportDbDlg, wxDialog)
@@ -26,12 +27,9 @@ END_EVENT_TABLE()
 
 
 ExportDbDlg::ExportDbDlg(wxWindow * parent,
-                         const Config & config,
                          const std::vector<wxImage> & images):
   wxDialog(parent, wxID_NEW, _("Export to database")),
-  m_config(config),
   m_images(images),
-  m_medocDb(config.getDbConfig()),
   m_title(new wxTextCtrl(this, wxID_NEW)),
   m_calendar(new wxCalendarCtrl(this, wxID_NEW)),
   m_languages(new wxChoice(this, wxID_NEW))
@@ -78,17 +76,17 @@ void ExportDbDlg::onExport(wxCommandEvent &)
   }
   else
   {
-    wxPasswordEntryDialog passwordDlg(this, _T("Please enter your passphrase"));
-    if(passwordDlg.ShowModal() == wxID_OK)
+    LoginDlg loginDlg(this);
+    if(loginDlg.ShowModal() == wxID_OK)
     {
-      if(m_medocDb.checkUser(m_config.getDbConfig().getAccount(),
-                             passwordDlg.GetValue()))
+      if(m_medocDb.checkUser(loginDlg.getLogin(),
+                             loginDlg.getPassword()))
       {
         m_medocDb.createDocument(m_title->GetValue(),
                                  m_calendar->GetDate(),
                                  m_languages->GetStringSelection(),
                                  processImages(),
-                                 passwordDlg.GetValue());
+                                 loginDlg.getPassword());
       }
       else
       {

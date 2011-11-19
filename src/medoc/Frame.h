@@ -18,7 +18,6 @@
 
 #include <vector>
 #include <wx/wx.h>
-#include "Config.h"
 
 class ImagePanel;
 
@@ -37,7 +36,6 @@ protected:
       ID_IMPORT_DEVICE,
       ID_EXPORT_FILE,
       ID_EXPORT_DB,
-      ID_CONFIG_DB,
       ID_IMAGE_LIST,
       ID_VIEW_ZOOMIN,
       ID_VIEW_ZOOMOUT,
@@ -52,7 +50,6 @@ protected:
   void onImportDevice(wxCommandEvent &);
   void onExportFile(wxCommandEvent &);
   void onExportDb(wxCommandEvent &);
-  void onConfigureDatabase(wxCommandEvent &);
   void onZoomIn(wxCommandEvent &);
   void onZoomOut(wxCommandEvent &);
   void onZoomFit(wxCommandEvent &);
@@ -68,7 +65,6 @@ private:
   
   wxListBox * m_imageList;
   ImagePanel * m_imagePanel;
-  Config m_config;
 };
 
 #endif

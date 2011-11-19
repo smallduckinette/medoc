@@ -28,11 +28,10 @@ DatabaseOptionsPanel::DatabaseOptionsPanel(wxWindow * parent):
                         wxSP_ARROW_KEYS,
                         1,
                         65535,
-                        2345)),
+                        5432)),
   m_name(new wxTextCtrl(this, wxID_NEW, wxEmptyString)),
   m_login(new wxTextCtrl(this, wxID_NEW)),
-  m_password(new wxTextCtrl(this, wxID_NEW, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PASSWORD)),
-  m_account(new wxTextCtrl(this, wxID_NEW))
+  m_password(new wxTextCtrl(this, wxID_NEW, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PASSWORD))
 {
   wxGridSizer * grid = new wxGridSizer(2, 3);
   grid->Add(new wxStaticText(this, wxID_NEW, _("Db host")), 0, wxALIGN_CENTER_VERTICAL);
@@ -45,8 +44,6 @@ DatabaseOptionsPanel::DatabaseOptionsPanel(wxWindow * parent):
   grid->Add(m_login, 0, wxEXPAND);
   grid->Add(new wxStaticText(this, wxID_NEW, _("Db password")), 0, wxALIGN_CENTER_VERTICAL);
   grid->Add(m_password, 0, wxEXPAND);
-  grid->Add(new wxStaticText(this, wxID_NEW, _("Medoc account")), 0, wxALIGN_CENTER_VERTICAL);
-  grid->Add(m_account, 0, wxEXPAND);
   
   wxBoxSizer * vbox = new wxBoxSizer(wxVERTICAL);
   vbox->Add(grid, 0, wxEXPAND | wxALL, 7);
@@ -60,7 +57,7 @@ void DatabaseOptionsPanel::loadConfig()
   wxConfig config(_("medoc"));
   
   m_host->SetValue(config.Read(_("DbHost"), _("localhost")));
-  m_port->SetValue(config.Read(_("DbPort"), 2345));
+  m_port->SetValue(config.Read(_("DbPort"), 5432));
   m_name->SetValue(config.Read(_("DbName"), _("medoc")));
   m_login->SetValue(config.Read(_("DbLogin"), _("")));
   m_password->SetValue(config.Read(_("DbPassword"), _("")));

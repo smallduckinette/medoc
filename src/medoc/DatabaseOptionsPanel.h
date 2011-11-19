@@ -33,7 +33,6 @@ private:
   wxTextCtrl * m_name;
   wxTextCtrl * m_login;
   wxTextCtrl * m_password;
-  wxTextCtrl * m_account;  
 };
 
 #endif

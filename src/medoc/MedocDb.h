@@ -18,12 +18,11 @@
 
 #include <pqxx/pqxx>
 #include <wx/wx.h>
-#include "Config.h"
 
 class MedocDb
 {
 public:
-  MedocDb(const DbConfig & dbConfig);
+  MedocDb();
   
   std::vector<wxString> getLanguages() const;
   bool checkUser(const wxString & account,

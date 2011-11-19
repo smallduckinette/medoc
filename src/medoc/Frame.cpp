@@ -19,7 +19,6 @@
 #include "ImagePanel.h"
 #include "PageInfo.h"
 #include "ScannerDlg.h"
-#include "DatabaseDlg.h"
 #include "ExportDbDlg.h"
 #include "OptionsDlg.h"
 
@@ -31,7 +30,6 @@ BEGIN_EVENT_TABLE(Frame, wxFrame)
   EVT_MENU(ID_IMPORT_FILE, Frame::onImportFile)
   EVT_MENU(ID_IMPORT_DEVICE, Frame::onImportDevice)
   EVT_MENU(ID_EXPORT_DB, Frame::onExportDb)
-  EVT_MENU(ID_CONFIG_DB, Frame::onConfigureDatabase)
   EVT_MENU(ID_VIEW_ZOOMIN, Frame::onZoomIn)
   EVT_MENU(ID_VIEW_ZOOMOUT, Frame::onZoomOut)
   EVT_MENU(ID_VIEW_ZOOMFIT, Frame::onZoomFit)
@@ -63,8 +61,6 @@ Frame::Frame():
   wxMenu * menuExport = new wxMenu;
   menuExport->Append(ID_EXPORT_FILE, _("To &file..."));
   menuExport->Append(ID_EXPORT_DB, _("To &database..."));
-  menuExport->AppendSeparator();
-  menuExport->Append(ID_CONFIG_DB, _("&Configure database...&"));
 
   wxMenu * menuView = new wxMenu;
   menuView->Append(ID_VIEW_ZOOMIN, _("Zoom &in"));
@@ -162,7 +158,7 @@ void Frame::onExportDb(wxCommandEvent &)
   {
     try
     {
-      ExportDbDlg exportDbDlg(this, m_config, getImages());
+      ExportDbDlg exportDbDlg(this, getImages());
       exportDbDlg.ShowModal();
       retry = false;
     }
@@ -170,25 +166,12 @@ void Frame::onExportDb(wxCommandEvent &)
     {
       wxMessageDialog message(this, wxString(e.what(), wxConvUTF8));
       message.ShowModal();
-      DatabaseDlg databaseDlg(this);
-      if(databaseDlg.ShowModal() == wxID_OK)
-      {
-        m_config.setDbConfig(databaseDlg.getDbConfig());
-      }
-      else
+      OptionsDlg optionsDlg(this);
+      if(optionsDlg.ShowModal() == wxID_CANCEL)
       {
         retry = false;
       }
     }
-  }
-}
-
-void Frame::onConfigureDatabase(wxCommandEvent &)
-{
-  DatabaseDlg databaseDlg(this);
-  if(databaseDlg.ShowModal() == wxID_OK)
-  {
-    m_config.setDbConfig(databaseDlg.getDbConfig());
   }
 }
 
