@@ -18,6 +18,7 @@
 #include <wx/mstream.h>
 #include "MedocDb.h"
 #include "LoginDlg.h"
+#include "ImageUtils.h"
 
 
 BEGIN_EVENT_TABLE(ExportDbDlg, wxDialog)
@@ -109,12 +110,10 @@ std::vector<MedocDb::File> ExportDbDlg::processImages() const
   
   for(const wxImage & image : m_images)
   {
-    double ratio = std::max(image.GetHeight() / 80, image.GetWidth() / 80);
-    
     files.push_back
       (MedocDb::File
        (processImage(image), 
-        processImage(image.Scale(image.GetWidth() / ratio, image.GetHeight() / ratio, wxIMAGE_QUALITY_HIGH))));
+        processImage(scale(image, 80))));
   }
   
   return files;

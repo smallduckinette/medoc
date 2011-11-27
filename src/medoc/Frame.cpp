@@ -18,6 +18,7 @@
 
 #include <wx/config.h>
 
+#include "GalleryPanel.h"
 #include "ImagePanel.h"
 #include "PageInfo.h"
 #include "ScannerDlg.h"
@@ -47,7 +48,7 @@ Frame::Frame():
           _("Medoc"), 
           wxDefaultPosition,
           wxSize(800, 600)),
-  m_imageList(new wxListBox(this, ID_IMAGE_LIST)),
+  m_galleryPanel(new GalleryPanel(this, 2, 150)),
   m_imagePanel(new ImagePanel(this))
 {
   // Menus
@@ -81,9 +82,9 @@ Frame::Frame():
   
   // Frame
   wxBoxSizer * sizer = new wxBoxSizer(wxHORIZONTAL);
-  sizer->Add(m_imageList, 0, wxEXPAND);
+  sizer->Add(m_galleryPanel, 0, wxEXPAND);
   sizer->Add(m_imagePanel, 1, wxEXPAND);
-
+  
   // Show
   SetSizer(sizer);
   Show(true);
@@ -91,7 +92,7 @@ Frame::Frame():
 
 void Frame::onClear(wxCommandEvent &)
 {
-  m_imageList->Clear();
+  m_galleryPanel->clear();
   m_imagePanel->clear();
 }
 
@@ -132,7 +133,8 @@ void Frame::onImportFile(wxCommandEvent &)
       int imageCount = wxImage::GetImageCount(paths.Item(i));
       for(int imageIndex = 0; imageIndex < imageCount; ++imageIndex)
       {
-        onImageSelected(m_imageList->Append(names.Item(i), new PageInfo(wxImage(paths.Item(i), wxBITMAP_TYPE_ANY, imageIndex))));
+        m_galleryPanel->addImage(wxImage(paths.Item(i)));
+        //onImageSelected(m_imageList->Append(names.Item(i), new PageInfo(wxImage(paths.Item(i), wxBITMAP_TYPE_ANY, imageIndex))));
       }
     }
   }
@@ -146,10 +148,10 @@ void Frame::onImportDevice(wxCommandEvent &)
     ScannerDlg scannerDlg(this);
     if(scannerDlg.ShowModal() == wxID_OK)
     {
-      for(const wxImage & image : scannerDlg.getImages())
-      {
-        onImageSelected(m_imageList->Append(_("Scanned image"), new PageInfo(image)));
-      }
+      // for(const wxImage & image : scannerDlg.getImages())
+      // {
+      //   onImageSelected(m_imageList->Append(_("Scanned image"), new PageInfo(image)));
+      // }
     }
   }
   catch(const std::exception & e)
@@ -214,16 +216,16 @@ void Frame::onImageSelected(wxCommandEvent & event)
 
 void Frame::onImageSelected(int index)
 {
-  m_imageList->SetSelection(index);
-  m_imagePanel->setImage(static_cast<PageInfo *>(m_imageList->GetClientObject(index))->getImage());  
+  //m_imageList->SetSelection(index);
+  //m_imagePanel->setImage(static_cast<PageInfo *>(m_imageList->GetClientObject(index))->getImage());  
 }
 
 std::vector<wxImage> Frame::getImages() const
 {
   std::vector<wxImage> images;
-  for(size_t i = 0; i < m_imageList->GetCount(); ++i)
-  {
-    images.push_back(static_cast<PageInfo *>(m_imageList->GetClientObject(i))->getImage());
-  }
+  // for(size_t i = 0; i < m_imageList->GetCount(); ++i)
+  // {
+  //   images.push_back(static_cast<PageInfo *>(m_imageList->GetClientObject(i))->getImage());
+  // }
   return images;
 }

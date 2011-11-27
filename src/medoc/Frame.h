@@ -19,6 +19,7 @@
 #include <vector>
 #include <wx/wx.h>
 
+class GalleryPanel;
 class ImagePanel;
 
 class Frame : public wxFrame
@@ -62,8 +63,8 @@ protected:
 private:
   void onImageSelected(int index);
   std::vector<wxImage> getImages() const;
-  
-  wxListBox * m_imageList;
+
+  GalleryPanel * m_galleryPanel;
   ImagePanel * m_imagePanel;
 };
 
