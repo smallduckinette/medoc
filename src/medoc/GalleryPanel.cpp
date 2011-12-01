@@ -21,7 +21,7 @@
 GalleryPanel::GalleryPanel(wxWindow * parent,
                            int cols,
                            int imageSize):
-  wxScrolledWindow(parent, wxID_ANY, wxDefaultPosition, wxSize(imageSize * cols, 0)),
+  wxScrolledWindow(parent, wxID_ANY, wxDefaultPosition, wxSize((imageSize + 20) * cols, 0)),
   m_cols(cols),
   m_imageSize(imageSize)
 {
@@ -46,15 +46,18 @@ void GalleryPanel::OnDraw(wxDC & dc)
   backgroundBrush.SetColour(*wxWHITE);
   dc.SetBackground(backgroundBrush);
   dc.Clear();
-
-  SetVirtualSize(m_cols * m_imageSize,
-                 (ceil(static_cast<double>(m_bitmaps.size()) / m_cols)) * m_imageSize);
-
+  
+  SetVirtualSize(m_cols * (m_imageSize + 20),
+                 (ceil(static_cast<double>(m_bitmaps.size()) / m_cols)) * (m_imageSize + 20));
+  
   int x = 0;
   int y = 0;
   for(const wxBitmap & bitmap : m_bitmaps)
   {
-    dc.DrawBitmap(bitmap, x * m_imageSize, y * m_imageSize, false);
+    int posx = x * (m_imageSize + 20) + (m_imageSize / 2 + 10) - bitmap.GetWidth() / 2;
+    int posy = y * (m_imageSize + 20) + (m_imageSize / 2 + 10) - bitmap.GetHeight() / 2;
+
+    dc.DrawBitmap(bitmap, posx, posy, false);
     ++x;
     if(x >= m_cols)
     {
