@@ -18,6 +18,7 @@
 #include <cmath>
 #include <stdexcept>
 #include <algorithm>
+#include <wx/scrolwin.h>
 
 #include "ImageUtils.h"
 
@@ -30,7 +31,7 @@ GalleryPanel::GalleryPanel(wxWindow * parent,
                            wxWindowID id,
                            int cols,
                            int imageSize):
-  wxScrolledWindow(parent, id, wxDefaultPosition, wxSize((imageSize + 20) * cols, 0)),
+  wxScrolledWindow(parent, id, wxDefaultPosition, wxSize((imageSize + 20) * cols + 20, 0)),
   m_cols(cols),
   m_imageSize(imageSize)
 {
