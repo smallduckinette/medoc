@@ -27,7 +27,9 @@ public:
                int cols,
                int imageSize);
   
-  void addImage(const wxImage & image);
+  int addImage(const wxImage & image);
+  wxImage getImage(int index) const;
+  std::vector<wxImage> getAllImages() const;
   void clear();
   
 protected:
@@ -41,7 +43,7 @@ private:
   int m_orientation;
   int m_cols;
   int m_imageSize;
-  std::vector<wxBitmap> m_bitmaps;
+  std::vector<std::pair<wxImage, wxBitmap> > m_bitmaps;
 };
 
 #endif

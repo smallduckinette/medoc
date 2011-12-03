@@ -133,8 +133,7 @@ void Frame::onImportFile(wxCommandEvent &)
       int imageCount = wxImage::GetImageCount(paths.Item(i));
       for(int imageIndex = 0; imageIndex < imageCount; ++imageIndex)
       {
-        m_galleryPanel->addImage(wxImage(paths.Item(i)));
-        //onImageSelected(m_imageList->Append(names.Item(i), new PageInfo(wxImage(paths.Item(i), wxBITMAP_TYPE_ANY, imageIndex))));
+        onImageSelected(m_galleryPanel->addImage(wxImage(paths.Item(i))));
       }
     }
   }
@@ -148,10 +147,10 @@ void Frame::onImportDevice(wxCommandEvent &)
     ScannerDlg scannerDlg(this);
     if(scannerDlg.ShowModal() == wxID_OK)
     {
-      // for(const wxImage & image : scannerDlg.getImages())
-      // {
-      //   onImageSelected(m_imageList->Append(_("Scanned image"), new PageInfo(image)));
-      // }
+      for(const wxImage & image : scannerDlg.getImages())
+      {
+        onImageSelected(m_galleryPanel->addImage(image));
+      }
     }
   }
   catch(const std::exception & e)
@@ -208,24 +207,19 @@ void Frame::onZoomReset(wxCommandEvent &)
 
 void Frame::onImageSelected(wxCommandEvent & event)
 {
-  //if(event.IsSelection())
-  //{
-  //  m_imagePanel->setImage(static_cast<PageInfo *>(event.GetClientObject())->getImage());  
-  //}
+  if(event.IsSelection())
+  {
+    m_imagePanel->setImage(m_galleryPanel->getImage(event.GetSelection()));
+  }
 }
 
 void Frame::onImageSelected(int index)
 {
   //m_imageList->SetSelection(index);
-  //m_imagePanel->setImage(static_cast<PageInfo *>(m_imageList->GetClientObject(index))->getImage());  
+  m_imagePanel->setImage(m_galleryPanel->getImage(index));
 }
 
 std::vector<wxImage> Frame::getImages() const
 {
-  std::vector<wxImage> images;
-  // for(size_t i = 0; i < m_imageList->GetCount(); ++i)
-  // {
-  //   images.push_back(static_cast<PageInfo *>(m_imageList->GetClientObject(i))->getImage());
-  // }
-  return images;
+  return m_galleryPanel->getAllImages();
 }

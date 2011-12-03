@@ -16,6 +16,8 @@
 #include "GalleryPanel.h"
 
 #include <cmath>
+#include <stdexcept>
+#include <algorithm>
 
 #include "ImageUtils.h"
 
@@ -35,10 +37,33 @@ GalleryPanel::GalleryPanel(wxWindow * parent,
   SetScrollRate(10, 10);
 }
 
-void GalleryPanel::addImage(const wxImage & image)
+int GalleryPanel::addImage(const wxImage & image)
 {
-  m_bitmaps.push_back(scale(image, m_imageSize));
+  m_bitmaps.push_back(std::make_pair(image, scale(image, m_imageSize)));
   Refresh();
+  return (m_bitmaps.size() - 1);
+}
+
+wxImage GalleryPanel::getImage(int index) const
+{
+  if(index >= 0 && index < static_cast<int>(m_bitmaps.size()))
+  {
+    return m_bitmaps.at(index).first;
+  }
+  else
+  {
+    throw std::runtime_error("Bad index");
+  }
+}
+
+std::vector<wxImage> GalleryPanel::getAllImages() const
+{
+  std::vector<wxImage> images;
+  std::transform(m_bitmaps.begin(),
+                 m_bitmaps.end(),
+                 std::back_inserter(images),
+                 std::bind(&std::pair<wxImage, wxBitmap>::first, std::placeholders::_1));
+  return images;
 }
 
 void GalleryPanel::clear()
@@ -59,11 +84,12 @@ void GalleryPanel::OnDraw(wxDC & dc)
   
   int x = 0;
   int y = 0;
-  for(const wxBitmap & bitmap : m_bitmaps)
+  for(const std::pair<wxImage, wxBitmap> & item : m_bitmaps)
   {
+    const wxBitmap & bitmap = item.second;
     int posx = x * (m_imageSize + 20) + (m_imageSize / 2 + 10) - bitmap.GetWidth() / 2;
     int posy = y * (m_imageSize + 20) + (m_imageSize / 2 + 10) - bitmap.GetHeight() / 2;
-
+    
     dc.DrawBitmap(bitmap, posx, posy, false);
     ++x;
     if(x >= m_cols)
