@@ -15,13 +15,20 @@
 
 #include "GalleryPanel.h"
 
+#include <cmath>
+
 #include "ImageUtils.h"
+
+BEGIN_EVENT_TABLE(GalleryPanel, wxScrolledWindow)
+  EVT_LEFT_DOWN(GalleryPanel::onSelect)
+END_EVENT_TABLE()
 
 
 GalleryPanel::GalleryPanel(wxWindow * parent,
+                           wxWindowID id,
                            int cols,
                            int imageSize):
-  wxScrolledWindow(parent, wxID_ANY, wxDefaultPosition, wxSize((imageSize + 20) * cols, 0)),
+  wxScrolledWindow(parent, id, wxDefaultPosition, wxSize((imageSize + 20) * cols, 0)),
   m_cols(cols),
   m_imageSize(imageSize)
 {
@@ -65,4 +72,25 @@ void GalleryPanel::OnDraw(wxDC & dc)
       ++y;
     }
   }
+}
+
+void GalleryPanel::onSelect(wxMouseEvent & event)
+{
+  int posx;
+  int posy;
+  CalcUnscrolledPosition(event.GetX(), event.GetY(), &posx, &posy);
+  
+  size_t imagex = std::floor(static_cast<double>(posx) / (m_imageSize + 20));
+  size_t imagey = std::floor(static_cast<double>(posy) / (m_imageSize + 20));
+  size_t imageIndex = imagex + imagey * m_cols;
+  
+  if(imageIndex < m_bitmaps.size())
+  {
+    wxCommandEvent commandEvent(wxEVT_COMMAND_LISTBOX_SELECTED, GetId());
+    commandEvent.SetInt(imageIndex);
+    commandEvent.SetExtraLong(1);
+    GetEventHandler()->ProcessEvent(commandEvent);
+  }
+  
+  event.Skip();
 }

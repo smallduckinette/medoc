@@ -23,6 +23,7 @@ class GalleryPanel : public wxScrolledWindow
 {
 public:
   GalleryPanel(wxWindow * parent, 
+               wxWindowID id,
                int cols,
                int imageSize);
   
@@ -31,6 +32,10 @@ public:
   
 protected:
   void OnDraw(wxDC & dc);
+  
+  void onSelect(wxMouseEvent & event);
+
+  DECLARE_EVENT_TABLE();
   
 private:
   int m_orientation;

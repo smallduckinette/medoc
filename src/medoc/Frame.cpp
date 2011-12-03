@@ -48,7 +48,7 @@ Frame::Frame():
           _("Medoc"), 
           wxDefaultPosition,
           wxSize(800, 600)),
-  m_galleryPanel(new GalleryPanel(this, 2, 150)),
+  m_galleryPanel(new GalleryPanel(this, ID_IMAGE_LIST, 2, 150)),
   m_imagePanel(new ImagePanel(this))
 {
   // Menus
@@ -208,10 +208,10 @@ void Frame::onZoomReset(wxCommandEvent &)
 
 void Frame::onImageSelected(wxCommandEvent & event)
 {
-  if(event.IsSelection())
-  {
-    m_imagePanel->setImage(static_cast<PageInfo *>(event.GetClientObject())->getImage());  
-  }
+  //if(event.IsSelection())
+  //{
+  //  m_imagePanel->setImage(static_cast<PageInfo *>(event.GetClientObject())->getImage());  
+  //}
 }
 
 void Frame::onImageSelected(int index)
