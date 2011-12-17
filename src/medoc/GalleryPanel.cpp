@@ -40,7 +40,7 @@ GalleryPanel::GalleryPanel(wxWindow * parent,
 
 int GalleryPanel::addImage(const wxImage & image)
 {
-  m_bitmaps.push_back(std::make_pair(image, scale(image, m_imageSize)));
+  m_bitmaps.push_back(std::make_shared<GalleryItem>(image, scale(image, m_imageSize)));
   Refresh();
   return (m_bitmaps.size() - 1);
 }
@@ -49,7 +49,7 @@ wxImage GalleryPanel::getImage(int index) const
 {
   if(index >= 0 && index < static_cast<int>(m_bitmaps.size()))
   {
-    return m_bitmaps.at(index).first;
+    return m_bitmaps.at(index)->m_image;
   }
   else
   {
@@ -63,7 +63,7 @@ std::vector<wxImage> GalleryPanel::getAllImages() const
   std::transform(m_bitmaps.begin(),
                  m_bitmaps.end(),
                  std::back_inserter(images),
-                 std::bind(&std::pair<wxImage, wxBitmap>::first, std::placeholders::_1));
+                 std::bind(&GalleryItem::m_image, std::placeholders::_1));
   return images;
 }
 
@@ -85,12 +85,20 @@ void GalleryPanel::OnDraw(wxDC & dc)
   
   int x = 0;
   int y = 0;
-  for(const std::pair<wxImage, wxBitmap> & item : m_bitmaps)
+  for(const std::shared_ptr<GalleryItem> & item : m_bitmaps)
   {
-    const wxBitmap & bitmap = item.second;
+    const wxBitmap & bitmap = item->m_bitmap;
     int posx = x * (m_imageSize + 20) + (m_imageSize / 2 + 10) - bitmap.GetWidth() / 2;
     int posy = y * (m_imageSize + 20) + (m_imageSize / 2 + 10) - bitmap.GetHeight() / 2;
     
+    if(item->isSelected())
+    {
+      dc.DrawRoundedRectangle(x * (m_imageSize + 20) + 5,
+                              y * (m_imageSize + 20) + 5,
+                              m_imageSize + 10,
+                              m_imageSize + 10,
+                              3);
+    }
     dc.DrawBitmap(bitmap, posx, posy, false);
     ++x;
     if(x >= m_cols)
@@ -111,8 +119,21 @@ void GalleryPanel::onSelect(wxMouseEvent & event)
   size_t imagey = std::floor(static_cast<double>(posy) / (m_imageSize + 20));
   size_t imageIndex = imagex + imagey * m_cols;
   
+  if(!event.ControlDown())
+  {
+    unselectAll();
+  }
+  
   if(imageIndex < m_bitmaps.size())
   {
+    if(event.ControlDown())
+    {
+      m_bitmaps.at(imageIndex)->invertSelection();
+    }
+    else
+    {
+      m_bitmaps.at(imageIndex)->select();
+    }
     wxCommandEvent commandEvent(wxEVT_COMMAND_LISTBOX_SELECTED, GetId());
     commandEvent.SetInt(imageIndex);
     commandEvent.SetExtraLong(1);
@@ -120,4 +141,40 @@ void GalleryPanel::onSelect(wxMouseEvent & event)
   }
   
   event.Skip();
+  Refresh();
+}
+
+void GalleryPanel::unselectAll()
+{
+  std::for_each(m_bitmaps.begin(),
+                m_bitmaps.end(),
+                std::bind(&GalleryItem::deselect, std::placeholders::_1));
+}
+
+GalleryPanel::GalleryItem::GalleryItem(const wxImage & image,
+                                       const wxBitmap & bitmap):
+  m_image(image),
+  m_bitmap(bitmap),
+  m_selected(false)
+{
+}
+
+void GalleryPanel::GalleryItem::select()
+{
+  m_selected = true;
+}
+
+void GalleryPanel::GalleryItem::deselect()
+{
+  m_selected = false;
+}
+
+void GalleryPanel::GalleryItem::invertSelection()
+{
+  m_selected = !m_selected;
+}
+
+bool GalleryPanel::GalleryItem::isSelected() const
+{
+  return m_selected;
 }

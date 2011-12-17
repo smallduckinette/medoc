@@ -17,6 +17,7 @@
 #define __MEDOC_GALLERYPANEL_H__
 
 #include <vector>
+#include <memory>
 #include <wx/wx.h>
 
 class GalleryPanel : public wxScrolledWindow
@@ -40,10 +41,29 @@ protected:
   DECLARE_EVENT_TABLE();
   
 private:
+  void unselectAll();
+
+  struct GalleryItem
+  {
+    GalleryItem(const wxImage & image,
+                const wxBitmap & bitmap);
+    
+    void select();
+    void deselect();
+    void invertSelection();
+    bool isSelected() const;
+
+    wxImage m_image;
+    wxBitmap m_bitmap;
+    
+  private:
+    bool m_selected;
+  };
+  
   int m_orientation;
   int m_cols;
   int m_imageSize;
-  std::vector<std::pair<wxImage, wxBitmap> > m_bitmaps;
+  std::vector<std::shared_ptr<GalleryItem> > m_bitmaps;
 };
 
 #endif
