@@ -33,6 +33,8 @@ protected:
       ID_FILE_CLEAR = wxID_HIGHEST + 1,
       ID_FILE_OPTIONS,
       ID_FILE_QUIT,
+      ID_GALLERY_UP,
+      ID_GALLERY_DOWN,
       ID_IMPORT_FILE,
       ID_IMPORT_DEVICE,
       ID_EXPORT_FILE,
@@ -47,6 +49,8 @@ protected:
   void onClear(wxCommandEvent &);
   void onOptions(wxCommandEvent &);
   void onQuit(wxCommandEvent &);
+  void onGalleryUp(wxCommandEvent &);
+  void onGalleryDown(wxCommandEvent &);
   void onImportFile(wxCommandEvent &);
   void onImportDevice(wxCommandEvent &);
   void onExportFile(wxCommandEvent &);

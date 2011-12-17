@@ -73,6 +73,16 @@ void GalleryPanel::clear()
   Refresh();
 }
 
+void GalleryPanel::upSelection()
+{
+  moveSelection(m_bitmaps.begin(), m_bitmaps.end());
+}
+
+void GalleryPanel::downSelection()
+{
+  moveSelection(m_bitmaps.rbegin(), m_bitmaps.rend());
+}
+
 void GalleryPanel::OnDraw(wxDC & dc)
 {
   wxBrush backgroundBrush = dc.GetBackground();
@@ -142,6 +152,22 @@ void GalleryPanel::onSelect(wxMouseEvent & event)
   
   event.Skip();
   Refresh();
+}
+
+template<typename ITERATOR>
+void GalleryPanel::moveSelection(ITERATOR begin, ITERATOR end)
+{
+  ITERATOR it = begin;
+  for(; it != end; ++it)
+  {
+    if((*it)->isSelected()
+       && it != begin
+       && !(*(it - 1))->isSelected())
+    {
+      std::swap(*it, *(it - 1));
+    }
+  }
+  Refresh();  
 }
 
 void GalleryPanel::unselectAll()

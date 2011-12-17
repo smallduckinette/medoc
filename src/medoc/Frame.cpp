@@ -31,6 +31,8 @@ BEGIN_EVENT_TABLE(Frame, wxFrame)
   EVT_MENU(ID_FILE_CLEAR, Frame::onClear)
   EVT_MENU(ID_FILE_OPTIONS, Frame::onOptions)
   EVT_MENU(ID_FILE_QUIT, Frame::onQuit)
+  EVT_MENU(ID_GALLERY_UP, Frame::onGalleryUp)
+  EVT_MENU(ID_GALLERY_DOWN, Frame::onGalleryDown)
   EVT_MENU(ID_IMPORT_FILE, Frame::onImportFile)
   EVT_MENU(ID_IMPORT_DEVICE, Frame::onImportDevice)
   EVT_MENU(ID_EXPORT_DB, Frame::onExportDb)
@@ -58,6 +60,10 @@ Frame::Frame():
   menuFile->AppendSeparator();
   menuFile->Append(ID_FILE_QUIT, _("E&xit"));
   
+  wxMenu * menuGallery = new wxMenu;
+  menuGallery->Append(ID_GALLERY_UP, _("Bring selection &up"));
+  menuGallery->Append(ID_GALLERY_DOWN, _("Bring selection &down"));
+  
   wxMenu * menuImport = new wxMenu;
   menuImport->Append(ID_IMPORT_FILE, _("From &file..."));
   menuImport->Append(ID_IMPORT_DEVICE, _("From &device..."));
@@ -74,6 +80,7 @@ Frame::Frame():
   
   wxMenuBar * menuBar = new wxMenuBar;
   menuBar->Append(menuFile, _("&File"));
+  menuBar->Append(menuGallery, _("&Gallery"));
   menuBar->Append(menuImport, _("&Import"));
   menuBar->Append(menuExport, _("&Export"));
   menuBar->Append(menuView, _("&View"));
@@ -105,6 +112,16 @@ void Frame::onOptions(wxCommandEvent &)
 void Frame::onQuit(wxCommandEvent &)
 {
   Close();
+}
+
+void Frame::onGalleryUp(wxCommandEvent &)
+{
+  m_galleryPanel->upSelection();
+}
+
+void Frame::onGalleryDown(wxCommandEvent &)
+{
+  m_galleryPanel->downSelection();
 }
 
 void Frame::onImportFile(wxCommandEvent &)

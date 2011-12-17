@@ -33,6 +33,9 @@ public:
   std::vector<wxImage> getAllImages() const;
   void clear();
   
+  void upSelection();
+  void downSelection();
+  
 protected:
   void OnDraw(wxDC & dc);
   
@@ -41,8 +44,10 @@ protected:
   DECLARE_EVENT_TABLE();
   
 private:
+  template<typename ITERATOR>
+  void moveSelection(ITERATOR begin, ITERATOR end);
   void unselectAll();
-
+  
   struct GalleryItem
   {
     GalleryItem(const wxImage & image,
@@ -63,7 +68,8 @@ private:
   int m_orientation;
   int m_cols;
   int m_imageSize;
-  std::vector<std::shared_ptr<GalleryItem> > m_bitmaps;
+  typedef std::vector<std::shared_ptr<GalleryItem> > BitmapsT;
+  BitmapsT m_bitmaps;
 };
 
 #endif
