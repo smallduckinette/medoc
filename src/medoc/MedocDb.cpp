@@ -36,7 +36,7 @@ namespace pqxx
     static bool is_null(const wxDateTime &) { return false; }
     static wxDateTime null() { internal::throw_null_conversion(name()); return wxDateTime(); }
     static void from_string(const char Str[], wxDateTime & Obj) { Obj.ParseDateTime(wxString(Str, wxConvUTF8)); }
-    static PGSTD::string to_string(const wxDateTime & Obj) { return std::string(Obj.Format().mb_str(wxConvUTF8)); }
+    static PGSTD::string to_string(const wxDateTime & Obj) { return std::string(Obj.FormatISODate().mb_str(wxConvUTF8)) + "T" + std::string(Obj.FormatISOTime().mb_str(wxConvUTF8)); }
   };
 }
 
