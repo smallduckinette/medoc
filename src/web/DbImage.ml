@@ -21,21 +21,22 @@ open Eliom_services
 open Eliom_parameters
 open Eliom_sessions
 open Eliom_predefmod.Xhtml
-
+open Common
 
 module ThumbProps = 
 struct
-  let request_name = "select pgp_sym_decrypt_bytea(thumb, 'Meow') from File where fileid = $1"
+  let request_name = "select pgp_sym_decrypt_bytea(thumb, $2) from File where fileid = $1"
 end
 
 module FileProps = 
 struct
-  let request_name = "select pgp_sym_decrypt_bytea(file, 'Meow') from File where fileid = $1"
+  let request_name = "select pgp_sym_decrypt_bytea(file, $2) from File where fileid = $1"
 end
 
 module Input =
-  Types.Singleton
+  Types.Pair
     (Types.Int)
+    (Types.String)
 
 module Output = 
   Types.Singleton
@@ -53,24 +54,30 @@ module FileRequest =
     (Output)
     (FileProps)
     
-let get_thumb dbPool fileid = 
+let get_thumb dbPool fileid password = 
   Lwt_preemptive.detach 
     (DbPool.run dbPool)
-    (fun dbConn -> Postgresql.unescape_bytea (ThumbRequest.single_request dbConn prerr_endline fileid))
+    (fun dbConn -> Postgresql.unescape_bytea (ThumbRequest.single_request dbConn prerr_endline (fileid, password)))
 
-let get_file dbPool fileid = 
+let get_file dbPool fileid password = 
   Lwt_preemptive.detach 
     (DbPool.run dbPool) 
-    (fun dbConn -> Postgresql.unescape_bytea (FileRequest.single_request dbConn prerr_endline fileid))
+    (fun dbConn -> Postgresql.unescape_bytea (FileRequest.single_request dbConn prerr_endline (fileid, password)))
 
       
 let medoc_thumb = Eliom_services.new_service ["thumb"] (int "fileid") ()
 let medoc_file = Eliom_services.new_service ["file"] (int "fileid") ()
-
+  
+let get_key sp =
+  match Eliom_sessions.get_volatile_session_data session_table sp () with
+      Eliom_sessions.Data (_, key) -> key
+    | _ -> raise Not_found
+      
 let _ = 
   Eliom_predefmod.Streamlist.register medoc_thumb
-  (fun sp fileid () -> get_thumb Common.dbPool fileid >>= fun image -> return ([fun () -> return (Ocsigen_stream.of_string image)], "image/png"))
-
+    (fun sp fileid () -> get_thumb Common.dbPool fileid (get_key sp) >>= fun image -> return ([fun () -> return (Ocsigen_stream.of_string image)], "image/png"))
+    
 let _ = 
   Eliom_predefmod.Streamlist.register medoc_file
-  (fun sp fileid () -> get_file Common.dbPool fileid >>= fun image -> return ([fun () -> return (Ocsigen_stream.of_string image)], "image/png"))
+    (fun sp fileid () -> get_file Common.dbPool fileid (get_key sp) >>= fun image -> return ([fun () -> return (Ocsigen_stream.of_string image)], "image/jpg"))
+    
