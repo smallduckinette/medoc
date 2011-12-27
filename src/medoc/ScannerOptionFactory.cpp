@@ -37,16 +37,27 @@ ScannerOptionFactory::create(wxWindow * wxWindow,
                                      descriptor->desc,
                                      descriptor->constraint.string_list));
   }
-  else if((descriptor->type == SANE_TYPE_INT || descriptor->type == SANE_TYPE_FIXED)
-          && descriptor->constraint_type == SANE_CONSTRAINT_RANGE)
+  else if(descriptor->type == SANE_TYPE_INT || descriptor->type == SANE_TYPE_FIXED)
   {
-    return std::shared_ptr<ScannerOption>
-      (new ScannerOptionIntRange(wxWindow,
-                                 handle,
-                                 index,
-                                 descriptor->title,
-                                 descriptor->desc,
-                                 descriptor->constraint.range));
+    if(descriptor->constraint_type == SANE_CONSTRAINT_RANGE)
+    {
+      return std::shared_ptr<ScannerOption>
+        (new ScannerOptionIntRange(wxWindow,
+                                   handle,
+                                   index,
+                                   descriptor->title,
+                                   descriptor->desc,
+                                   descriptor->constraint.range));
+    }
+    else
+    {
+      return std::shared_ptr<ScannerOption>
+        (new ScannerOptionInt(wxWindow,
+                              handle,
+                              index,
+                              descriptor->title,
+                              descriptor->desc));
+    }
   }
   else if(descriptor->type == SANE_TYPE_BOOL)
   {
@@ -57,10 +68,18 @@ ScannerOptionFactory::create(wxWindow * wxWindow,
                              descriptor->title,
                              descriptor->desc));
   }
+  else if(descriptor->type == SANE_TYPE_GROUP || descriptor->type == SANE_TYPE_BUTTON)
+  {
+    return std::shared_ptr<ScannerOption>
+      (new ScannerOptionGroup(wxWindow,
+                              handle,
+                              index,
+                              descriptor->title,
+                              descriptor->desc));
+  }
   else
   {
-    std::cout << descriptor->type << " - " << descriptor->constraint_type << std::endl;
-    throw std::runtime_error("Unsupported option");
+    throw std::runtime_error("Unexpected option");
   }
 }
 

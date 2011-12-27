@@ -64,6 +64,26 @@ private:
   wxTextCtrl * m_input;
 };
 
+class ScannerOptionInt : public ScannerOption
+{
+public:
+  ScannerOptionInt(wxWindow * parent,
+                   const SANE_Handle & handle,
+                   int index,
+                   SANE_String_Const title,
+                   SANE_String_Const desc);
+  
+  void append(wxSizer * sizer);
+  void setOption();
+  
+private:
+  SANE_Handle m_handle;
+  int m_index;
+  
+  wxStaticText * m_title;
+  wxTextCtrl * m_input;
+};
+
 class ScannerOptionBool : public ScannerOption
 {
 public:
@@ -82,6 +102,26 @@ private:
 
   wxStaticText * m_title;
   wxCheckBox * m_input;
+};
+
+class ScannerOptionGroup : public ScannerOption
+{
+public:
+  ScannerOptionGroup(wxWindow * parent,
+                     const SANE_Handle & handle,
+                     int index,
+                     SANE_String_Const title,
+                     SANE_String_Const desc);
+  
+  void append(wxSizer * sizer);
+  void setOption();
+
+private:
+  SANE_Handle m_handle;
+  int m_index;
+
+  wxStaticText * m_title;
+  wxStaticText * m_description;
 };
 
 #endif
