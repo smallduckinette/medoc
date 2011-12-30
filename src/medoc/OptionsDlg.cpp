@@ -23,10 +23,12 @@ OptionsDlg::OptionsDlg(wxWindow * parent):
   wxDialog(parent, wxID_ANY, _("Options")),
   m_options(new wxNotebook(this, wxID_ANY)),
   m_dbPanel(new DatabaseOptionsPanel(m_options)),
-  m_pdfPanel(new PdfOptionsPanel(m_options))
+  m_pdfPanel(new PdfOptionsPanel(m_options)),
+  m_languagePanel(new LanguageOptionsPanel(m_options))
 {
   m_options->AddPage(m_dbPanel, _("Database"));
   m_options->AddPage(m_pdfPanel, _("PDF"));
+  m_options->AddPage(m_languagePanel, _("Languages"));
   
   wxBoxSizer * vbox = new wxBoxSizer(wxVERTICAL);
   vbox->Add(m_options, 1, wxEXPAND | wxALL, 7);  
@@ -34,6 +36,7 @@ OptionsDlg::OptionsDlg(wxWindow * parent):
 
   m_dbPanel->loadConfig();
   m_pdfPanel->loadConfig();
+  m_languagePanel->loadConfig();
 
   SetSizer(vbox);
 }
@@ -42,5 +45,6 @@ void OptionsDlg::onOk(wxCommandEvent & event)
 {
   m_dbPanel->saveConfig();
   m_pdfPanel->saveConfig();
+  m_languagePanel->saveConfig();
   event.Skip();
 }

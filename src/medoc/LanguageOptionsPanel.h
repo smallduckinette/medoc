@@ -13,31 +13,22 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef __MEDOC_OPTIONSDLG_H__
-#define __MEDOC_OPTIONSDLG_H__
+
+#ifndef __MEDOC_LANGUAGEOPTIONSPANEL_H__
+#define __MEDOC_LANGUAGEOPTIONSPANEL_H__
 
 #include <wx/wx.h>
-#include <wx/notebook.h>
 
-#include "DatabaseOptionsPanel.h"
-#include "PdfOptionsPanel.h"
-#include "LanguageOptionsPanel.h"
-
-class OptionsDlg : public wxDialog
+class LanguageOptionsPanel : public wxPanel
 {
 public:
-  OptionsDlg(wxWindow * parent);
+  LanguageOptionsPanel(wxWindow * parent);
+
+  void loadConfig();
+  void saveConfig();
   
-protected:
-  void onOk(wxCommandEvent & event);
-
-  DECLARE_EVENT_TABLE();
-
 private:
-  wxNotebook * m_options;
-  DatabaseOptionsPanel * m_dbPanel;
-  PdfOptionsPanel * m_pdfPanel;
-  LanguageOptionsPanel * m_languagePanel;
+  wxTextCtrl * m_tesseractDataPath;
 };
 
 #endif
