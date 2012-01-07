@@ -15,11 +15,13 @@
 
 #include "ExportDbDlg.h"
 
+#include <algorithm>
 #include <wx/mstream.h>
 #include "MedocDb.h"
 #include "LoginDlg.h"
 #include "ImageUtils.h"
 #include "MedocConfig.h"
+#include "Ocr.h"
 
 
 BEGIN_EVENT_TABLE(ExportDbDlg, wxDialog)
@@ -39,7 +41,7 @@ ExportDbDlg::ExportDbDlg(wxWindow * parent,
   MedocConfig config;
   for(const MedocConfig::Language & item : config.getLanguages())
   {
-    m_languages->Append(item.m_postgresLanguage);
+    m_languages->Append(item.m_language);
   }
   if(m_languages->GetCount() > 0)
   {
@@ -89,10 +91,13 @@ void ExportDbDlg::onExport(wxCommandEvent &)
       if(m_medocDb.checkUser(loginDlg.getLogin(),
                              loginDlg.getPassword()))
       {
+        wxString tesseractLanguage;
+        wxString postgresLanguage;
+        getCurrentLanguage(tesseractLanguage, postgresLanguage);
         m_medocDb.createDocument(m_title->GetValue(),
                                  m_calendar->GetDate(),
-                                 m_languages->GetStringSelection(),
-                                 processImages(),
+                                 postgresLanguage,
+                                 processImages(tesseractLanguage),
                                  loginDlg.getPassword());
       }
       else
@@ -110,8 +115,10 @@ void ExportDbDlg::onCancel(wxCommandEvent &)
   EndModal(wxID_CANCEL);
 }
 
-std::vector<MedocDb::File> ExportDbDlg::processImages() const
+std::vector<MedocDb::File> ExportDbDlg::processImages(const wxString & tesseractLanguage) const
 {
+  Ocr ocr(tesseractLanguage);
+  
   std::vector<MedocDb::File> files;
   
   for(const wxImage & image : m_images)
@@ -119,7 +126,8 @@ std::vector<MedocDb::File> ExportDbDlg::processImages() const
     files.push_back
       (MedocDb::File
        (processImage(image), 
-        processImage(scale(image, 80))));
+        processImage(scale(image, 80)),
+        ocr.recognize(image)));
   }
   
   return files;
@@ -136,4 +144,23 @@ std::string ExportDbDlg::processImage(const wxImage & image) const
             buffer.end(),
             std::back_inserter(stringBuf));
   return stringBuf;
+}
+
+void ExportDbDlg::getCurrentLanguage(wxString & tesseractLanguage, wxString & postgresLanguage)
+{
+  wxString currentLanguage = m_languages->GetStringSelection();
+  MedocConfig config;
+  std::vector<MedocConfig::Language> languages = config.getLanguages();
+  auto it = std::find_if(languages.begin(),
+                         languages.end(),
+                         [&currentLanguage](const MedocConfig::Language & language) {return language.m_language == currentLanguage;});
+  if(it != languages.end())
+  {
+    tesseractLanguage = it->m_tesseractLanguage;
+    postgresLanguage = it->m_postgresLanguage;
+  }
+  else
+  {
+    throw std::runtime_error("Bad current selection");
+  }
 }

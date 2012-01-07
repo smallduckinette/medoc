@@ -128,14 +128,14 @@ namespace
       {
         T.prepared("addFile")
           (documentId)
-          (m_title)
+          (file.m_contents)
           (m_language)
           (file.m_thumb)
           (file.m_image)
           (m_password).exec();
       }
     }
-
+    
     static void prepare(pqxx::connection & dbConn)
     {
       dbConn.prepare("createDocument", "select * from createDocument($1, $2, $3)")
@@ -201,9 +201,11 @@ bool MedocDb::checkUser(const wxString & account,
 }
 
 MedocDb::File::File(const std::string & image,
-                    const std::string & thumb):
+                    const std::string & thumb,
+                    const wxString & contents):
   m_image(image),
-  m_thumb(thumb)
+  m_thumb(thumb),
+  m_contents(contents)
 {
 }
 

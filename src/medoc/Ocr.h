@@ -21,7 +21,7 @@
 class Ocr
 {
 public:
-  Ocr();
+  Ocr(const wxString & language);
   ~Ocr();
 
   wxString recognize(const wxImage & image) const;

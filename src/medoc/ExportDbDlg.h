@@ -39,8 +39,9 @@ protected:
   DECLARE_EVENT_TABLE();
   
 private:
-  std::vector<MedocDb::File> processImages() const;
+  std::vector<MedocDb::File> processImages(const wxString & tesseractLanguage) const;
   std::string processImage(const wxImage & image) const;
+  void getCurrentLanguage(wxString & tesseractLanguage, wxString & postgresLanguage);
 
   std::vector<wxImage> m_images;
   MedocDb m_medocDb;

@@ -19,10 +19,10 @@
 
 #include "MedocConfig.h"
 
-Ocr::Ocr()
+Ocr::Ocr(const wxString & language)
 {
   MedocConfig config;
-  TessBaseAPI::SimpleInit(config.getTesseractDataPath().mb_str(wxConvUTF8), NULL, false);
+  TessBaseAPI::SimpleInit(config.getTesseractDataPath().mb_str(wxConvUTF8), language.mb_str(wxConvUTF8), false);
 }
 
 Ocr::~Ocr()

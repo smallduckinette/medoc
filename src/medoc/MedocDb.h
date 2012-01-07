@@ -31,10 +31,12 @@ public:
   struct File
   {
     File(const std::string & image,
-         const std::string & thumb);
-
+         const std::string & thumb,
+         const wxString & contents);
+    
     std::string m_image;
     std::string m_thumb;
+    wxString m_contents;
   };
 
   void createDocument(const wxString & title,
