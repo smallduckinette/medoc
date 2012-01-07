@@ -19,6 +19,7 @@
 #include "MedocDb.h"
 #include "LoginDlg.h"
 #include "ImageUtils.h"
+#include "MedocConfig.h"
 
 
 BEGIN_EVENT_TABLE(ExportDbDlg, wxDialog)
@@ -35,9 +36,14 @@ ExportDbDlg::ExportDbDlg(wxWindow * parent,
   m_calendar(new wxCalendarCtrl(this, wxID_NEW)),
   m_languages(new wxChoice(this, wxID_NEW))
 {
-  for(const wxString & language : m_medocDb.getLanguages())
+  MedocConfig config;
+  for(const MedocConfig::Language & item : config.getLanguages())
   {
-    m_languages->Append(language);
+    m_languages->Append(item.m_postgresLanguage);
+  }
+  if(m_languages->GetCount() > 0)
+  {
+    m_languages->SetSelection(0);
   }
   
   wxGridSizer * gbox = new wxGridSizer(2, 7);
