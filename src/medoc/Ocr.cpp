@@ -16,12 +16,13 @@
 #include "Ocr.h"
 
 #include <tesseract/baseapi.h>
-#include <wx/config.h>
+
+#include "MedocConfig.h"
 
 Ocr::Ocr()
 {
-  wxConfig config(_("medoc"));
-  TessBaseAPI::SimpleInit(config.Read(_("TesseractDataPath")).mb_str(wxConvUTF8), NULL, false);
+  MedocConfig config;
+  TessBaseAPI::SimpleInit(config.getTesseractDataPath().mb_str(wxConvUTF8), NULL, false);
 }
 
 Ocr::~Ocr()

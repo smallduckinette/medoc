@@ -16,8 +16,6 @@
 
 #include "Frame.h"
 
-#include <wx/config.h>
-
 #include "GalleryPanel.h"
 #include "ImagePanel.h"
 #include "PageInfo.h"
@@ -25,6 +23,7 @@
 #include "ExportDbDlg.h"
 #include "OptionsDlg.h"
 #include "PdfImageHandler.h"
+#include "MedocConfig.h"
 
 
 BEGIN_EVENT_TABLE(Frame, wxFrame)
@@ -128,10 +127,10 @@ void Frame::onImportFile(wxCommandEvent &)
 {
   if(PdfImageHandler * pdfImageHandler = dynamic_cast<PdfImageHandler *>(wxImage::FindHandler(_("PdfImageHanlder"))))
   {
-    wxConfig config(_("medoc"));
-    pdfImageHandler->setDpi(config.Read(_("PdfDpi"), 150));
+    MedocConfig config;
+    pdfImageHandler->setDpi(config.getDpi());
   }
-
+  
   wxFileDialog fileDialog(this,
                           _("Import file..."),
                           _(""),

@@ -15,7 +15,7 @@
 
 #include "PdfOptionsPanel.h"
 
-#include <wx/config.h>
+#include "MedocConfig.h"
 
 PdfOptionsPanel::PdfOptionsPanel(wxWindow * parent):
   wxPanel(parent, wxID_NEW),
@@ -42,14 +42,12 @@ PdfOptionsPanel::PdfOptionsPanel(wxWindow * parent):
 
 void PdfOptionsPanel::loadConfig()
 {
-  wxConfig config(_("medoc"));
-  
-  m_dpi->SetValue(config.Read(_("PdfDpi"), 150));
+  MedocConfig config;
+  m_dpi->SetValue(config.getDpi());
 }
 
 void PdfOptionsPanel::saveConfig()
 {
-  wxConfig config(_("medoc"));
-
-  config.Write(_("PdfDpi"), m_dpi->GetValue());
+  MedocConfig config;
+  config.setDpi(m_dpi->GetValue());
 }

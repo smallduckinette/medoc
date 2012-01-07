@@ -15,7 +15,7 @@
 
 #include "MedocDb.h"
 
-#include <wx/config.h>
+#include "MedocConfig.h"
 
 namespace pqxx
 {
@@ -165,13 +165,13 @@ MedocDb::MedocDb()
 {
   try
   {
-    wxConfig config(_("medoc"));
+    MedocConfig config;
     wxString str;
-    str << _("host=") << config.Read(_("DbHost"), _("localhost")) << _(" ")
-        << _("port=") << config.Read(_("DbPort"), 5432) << _(" ")
-        << _("dbname=") << config.Read(_("DbName"), _("medoc")) << _(" ")
-        << _("user=") << config.Read(_("DbLogin"), _("")) << _(" ")
-        << _("password=") << config.Read(_("DbPassword"), _(""));
+    str << _("host=") << config.getHost() << _(" ")
+        << _("port=") << config.getPort() << _(" ")
+        << _("dbname=") << config.getName() << _(" ")
+        << _("user=") << config.getLogin() << _(" ")
+        << _("password=") << config.getPassword();
     m_dbConn.reset(new pqxx::connection(str.mb_str(wxConvUTF8)));
     GetLanguages::prepare(*m_dbConn);
     CheckUser::prepare(*m_dbConn);

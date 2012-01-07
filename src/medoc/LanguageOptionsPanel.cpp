@@ -17,9 +17,9 @@
 
 #include <vector>
 #include <algorithm>
-#include <wx/config.h>
 
 #include "LanguageDlg.h"
+#include "MedocConfig.h"
 
 
 BEGIN_EVENT_TABLE(LanguageOptionsPanel, wxPanel)
@@ -63,38 +63,24 @@ LanguageOptionsPanel::LanguageOptionsPanel(wxWindow * parent):
 
 void LanguageOptionsPanel::loadConfig()
 {
-  wxConfig config(_("medoc"));
+  MedocConfig config;
+  m_tesseractDataPath->SetValue(config.getTesseractDataPath());
   
-  m_tesseractDataPath->SetValue(config.Read(_("TesseractDataPath"), _("/usr/share/tesseract-ocr/tessdata/")));
-  
-  wxString initialPath = config.GetPath();
-  config.SetPath(_("/Languages"));
-  
-  wxString group;
-  long index;
-  bool hasGroup = config.GetFirstGroup(group, index);
-  while(hasGroup)
+  for(const MedocConfig::Language & item : config.getLanguages())
   {
-    wxString tesseractValue = config.Read(_("/Languages/") + group + _("/Tesseract"));
-    wxString postgresValue = config.Read(_("/Languages/") + group + _("/Postgres"));
     long itemId = m_languages->InsertItem(m_languages->GetItemCount(), _(""));
-    m_languages->SetItem(itemId, 0, group);
-    m_languages->SetItem(itemId, 1, tesseractValue);
-    m_languages->SetItem(itemId, 2, postgresValue);
-    hasGroup = config.GetNextGroup(group, index);
+    m_languages->SetItem(itemId, 0, item.m_language);
+    m_languages->SetItem(itemId, 1, item.m_tesseractLanguage);
+    m_languages->SetItem(itemId, 2, item.m_postgresLanguage);    
   }
-  
-  config.SetPath(initialPath);
 }
 
 void LanguageOptionsPanel::saveConfig()
 {
-  wxConfig config(_("medoc"));
+  MedocConfig config;
+  config.setTesseractDataPath(m_tesseractDataPath->GetValue());
   
-  config.Write(_("TesseractDataPath"), m_tesseractDataPath->GetValue());  
-  
-  config.DeleteGroup(_("Languages"));
-  
+  std::vector<MedocConfig::Language> languages;
   long itemId = -1;
   do
   {
@@ -105,18 +91,18 @@ void LanguageOptionsPanel::saveConfig()
       listItem.SetId(itemId);
       listItem.SetColumn(0);
       m_languages->GetItem(listItem);
-      wxString key = _("Languages/") + listItem.GetText();
+      wxString key = listItem.GetText();
       listItem.SetColumn(1);
       m_languages->GetItem(listItem);
       wxString tesseractValue = listItem.GetText();
       listItem.SetColumn(2);
       m_languages->GetItem(listItem);
       wxString postgresValue = listItem.GetText();
-      config.Write(key + _T("/Tesseract"), tesseractValue);
-      config.Write(key + _T("/Postgres"), postgresValue);
+      languages.push_back({key, tesseractValue, postgresValue});
     }
   } 
   while(itemId != -1);
+  config.setLanguages(languages);
 }
 
 void LanguageOptionsPanel::onAdd(wxCommandEvent &)

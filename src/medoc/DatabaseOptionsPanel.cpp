@@ -15,7 +15,7 @@
 
 #include "DatabaseOptionsPanel.h"
 
-#include <wx/config.h>
+#include "MedocConfig.h"
 
 DatabaseOptionsPanel::DatabaseOptionsPanel(wxWindow * parent):
   wxPanel(parent, wxID_NEW),
@@ -54,22 +54,22 @@ DatabaseOptionsPanel::DatabaseOptionsPanel(wxWindow * parent):
 
 void DatabaseOptionsPanel::loadConfig()
 {
-  wxConfig config(_("medoc"));
+  MedocConfig config;
   
-  m_host->SetValue(config.Read(_("DbHost"), _("localhost")));
-  m_port->SetValue(config.Read(_("DbPort"), 5432));
-  m_name->SetValue(config.Read(_("DbName"), _("medoc")));
-  m_login->SetValue(config.Read(_("DbLogin"), _("")));
-  m_password->SetValue(config.Read(_("DbPassword"), _("")));
+  m_host->SetValue(config.getHost());
+  m_port->SetValue(config.getPort());
+  m_name->SetValue(config.getName());
+  m_login->SetValue(config.getLogin());
+  m_password->SetValue(config.getPassword());
 }
 
 void DatabaseOptionsPanel::saveConfig()
 {
-  wxConfig config(_("medoc"));
+  MedocConfig config;
   
-  config.Write(_("DbHost"), m_host->GetValue());
-  config.Write(_("DbPort"), m_port->GetValue());
-  config.Write(_("DbName"), m_name->GetValue());
-  config.Write(_("DbLogin"), m_login->GetValue());
-  config.Write(_("DbPassword"), m_password->GetValue());
+  config.setHost(m_host->GetValue());
+  config.setPort(m_port->GetValue());
+  config.setName(m_name->GetValue());
+  config.setLogin(m_login->GetValue());
+  config.setPassword(m_password->GetValue());
 }
