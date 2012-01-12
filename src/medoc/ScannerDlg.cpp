@@ -83,9 +83,12 @@ ScannerDlg::ScannerDlg(wxWindow * parent):
             1, 
             wxEXPAND | wxLEFT, 
             3);
-    
+  
+  m_gauge = new wxGauge(this, wxID_ANY, 100);
+  
   wxBoxSizer * vbox = new wxBoxSizer(wxVERTICAL);
   vbox->Add(gridSizer, 1, wxEXPAND | wxALL, 7);
+  vbox->Add(m_gauge, 0, wxEXPAND | wxBOTTOM | wxRIGHT | wxLEFT, 7);
   vbox->Add(hbox, 0, wxEXPAND | wxBOTTOM | wxRIGHT | wxLEFT, 7);
   
   SetSizer(vbox);
@@ -133,17 +136,20 @@ void ScannerDlg::onScan(bool many)
     std::vector<SANE_Byte> buffer(4096);
     wxString message;
     message << _("Scanning page ") << imageNb;
-    wxProgressDialog progress(_("Scanning..."), 
-                              message,
-                              parameters.bytes_per_line * parameters.lines);
-    progress.Update(0);
+    m_gauge->SetValue(0);
+    m_gauge->SetRange(parameters.bytes_per_line * parameters.lines);
+    wxTheApp->Yield();
     SANE_Int length;  
     while(sane_read(m_handle, &buffer[0], buffer.size(), &length) == SANE_STATUS_GOOD)
     {
       data.insert(data.end(), buffer.begin(), buffer.begin() + length);
-      progress.Update(data.size());
+      m_gauge->SetValue(data.size());
+      wxTheApp->Yield();
     }
     
+    m_gauge->SetValue(parameters.bytes_per_line * parameters.lines);
+    wxTheApp->Yield();
+
     wxImage image(parameters.pixels_per_line, data.size() / parameters.bytes_per_line);
     std::copy(data.begin(), data.end(), image.GetData());
     m_images.push_back(image);

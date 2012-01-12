@@ -53,6 +53,8 @@ private:
   std::vector<wxImage> m_images;
   
   std::vector<std::shared_ptr<ScannerOption> > m_options;
+
+  wxGauge * m_gauge;
 };
 
 #endif
