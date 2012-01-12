@@ -24,6 +24,7 @@ namespace
   wxString dbName(_("DbName"));
   wxString dbLogin(_("DbLogin"));
   wxString dbPassword(_("DbPassword"));
+  wxString ocrEnabled(_("OcrEnabled"));
   wxString tesseractDataPath(_("TesseractDataPath"));
 }
 
@@ -93,9 +94,19 @@ void MedocConfig::setPassword(const wxString & password)
   m_config.Write(dbPassword, password);
 }
 
+bool MedocConfig::isOcrEnabled()
+{
+  return m_config.Read(ocrEnabled, true);
+}
+
 wxString MedocConfig::getTesseractDataPath()
 {
   return m_config.Read(tesseractDataPath, _("/usr/share/tesseract-ocr/tessdata/"));
+}
+
+void MedocConfig::setOcrEnabled(bool value)
+{
+  m_config.Write(ocrEnabled, value);
 }
 
 void MedocConfig::setTesseractDataPath(const wxString & dataPath)

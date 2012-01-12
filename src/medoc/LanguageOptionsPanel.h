@@ -42,6 +42,7 @@ protected:
   DECLARE_EVENT_TABLE();
   
 private:
+  wxCheckBox * m_isOcrEnabled;
   wxTextCtrl * m_tesseractDataPath;
   wxListCtrl * m_languages;
   wxButton * m_addBtn;

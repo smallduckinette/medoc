@@ -44,7 +44,10 @@ public:
   void setPassword(const wxString & password);
   
   // Tesseract
+  bool isOcrEnabled();
   wxString getTesseractDataPath();
+  
+  void setOcrEnabled(bool value);
   void setTesseractDataPath(const wxString & dataPath);
 
   // Languages

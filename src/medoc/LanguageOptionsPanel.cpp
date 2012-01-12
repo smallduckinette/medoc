@@ -32,6 +32,7 @@ END_EVENT_TABLE()
 
 LanguageOptionsPanel::LanguageOptionsPanel(wxWindow * parent):
   wxPanel(parent, wxID_ANY),
+  m_isOcrEnabled(new wxCheckBox(this, wxID_ANY, wxEmptyString)),
   m_tesseractDataPath(new wxTextCtrl(this, wxID_ANY, wxEmptyString)),
   m_languages(new wxListCtrl(this, ID_LIST_LANGUAGES, wxDefaultPosition, wxDefaultSize, wxLC_REPORT)),
   m_addBtn(new wxButton(this, ID_BUTTON_ADD, _("Add"))),
@@ -42,6 +43,8 @@ LanguageOptionsPanel::LanguageOptionsPanel(wxWindow * parent):
   m_languages->InsertColumn(2, _T("Postgresql"));
   
   wxGridSizer * grid = new wxGridSizer(2, 3);
+  grid->Add(new wxStaticText(this, wxID_NEW, _("Enable OCR")), 0, wxALIGN_CENTER_VERTICAL);
+  grid->Add(m_isOcrEnabled, 0, wxEXPAND);
   grid->Add(new wxStaticText(this, wxID_NEW, _("Tesseract data path")), 0, wxALIGN_CENTER_VERTICAL);
   grid->Add(m_tesseractDataPath, 0, wxEXPAND);
   
@@ -64,6 +67,7 @@ LanguageOptionsPanel::LanguageOptionsPanel(wxWindow * parent):
 void LanguageOptionsPanel::loadConfig()
 {
   MedocConfig config;
+  m_isOcrEnabled->SetValue(config.isOcrEnabled());
   m_tesseractDataPath->SetValue(config.getTesseractDataPath());
   
   for(const MedocConfig::Language & item : config.getLanguages())
@@ -78,6 +82,7 @@ void LanguageOptionsPanel::loadConfig()
 void LanguageOptionsPanel::saveConfig()
 {
   MedocConfig config;
+  config.setOcrEnabled(m_isOcrEnabled->GetValue());
   config.setTesseractDataPath(m_tesseractDataPath->GetValue());
   
   std::vector<MedocConfig::Language> languages;

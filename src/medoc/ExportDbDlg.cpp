@@ -117,7 +117,13 @@ void ExportDbDlg::onCancel(wxCommandEvent &)
 
 std::vector<MedocDb::File> ExportDbDlg::processImages(const wxString & tesseractLanguage) const
 {
-  Ocr ocr(tesseractLanguage);
+  std::shared_ptr<Ocr> ocr;
+  
+  MedocConfig config;
+  if(config.isOcrEnabled())
+  {
+    ocr.reset(new Ocr(tesseractLanguage));
+  }
   
   std::vector<MedocDb::File> files;
   
@@ -127,7 +133,7 @@ std::vector<MedocDb::File> ExportDbDlg::processImages(const wxString & tesseract
       (MedocDb::File
        (processImage(image), 
         processImage(scale(image, 80)),
-        ocr.recognize(image)));
+        (ocr ? ocr->recognize(image) : wxString(_("")))));
   }
   
   return files;
