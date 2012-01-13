@@ -40,7 +40,7 @@ ScannerOptionStringChoice::ScannerOptionStringChoice(wxWindow * parent,
 
 void ScannerOptionStringChoice::append(wxSizer * sizer)
 {
-  sizer->Add(m_title, 0, wxEXPAND);
+  sizer->Add(m_title, 0, wxALIGN_CENTER_VERTICAL);
   sizer->Add(m_options, 1, wxEXPAND);
 }
 
@@ -85,7 +85,7 @@ ScannerOptionIntRange::ScannerOptionIntRange(wxWindow * parent,
 
 void ScannerOptionIntRange::append(wxSizer * sizer)
 {
-  sizer->Add(m_title, 0, wxEXPAND);
+  sizer->Add(m_title, 0, wxALIGN_CENTER_VERTICAL);
   sizer->Add(m_input, 1, wxEXPAND);
 }
 
@@ -130,7 +130,7 @@ ScannerOptionInt::ScannerOptionInt(wxWindow * parent,
 
 void ScannerOptionInt::append(wxSizer * sizer)
 {
-  sizer->Add(m_title, 0, wxEXPAND);
+  sizer->Add(m_title, 0, wxALIGN_CENTER_VERTICAL);
   sizer->Add(m_input, 1, wxEXPAND);
 }
 
@@ -168,7 +168,7 @@ ScannerOptionBool::ScannerOptionBool(wxWindow * parent,
 
 void ScannerOptionBool::append(wxSizer * sizer)
 {
-  sizer->Add(m_title, 0, wxEXPAND);
+  sizer->Add(m_title, 0, wxALIGN_CENTER_VERTICAL);
   sizer->Add(m_input, 1, wxEXPAND);
 }
 
@@ -200,7 +200,7 @@ ScannerOptionGroup::ScannerOptionGroup(wxWindow * parent,
 
 void ScannerOptionGroup::append(wxSizer * sizer)
 {
-  sizer->Add(m_title, 0, wxEXPAND);
+  sizer->Add(m_title, 0, wxALIGN_CENTER_VERTICAL);
   sizer->Add(m_description, 1, wxEXPAND);
 }
 

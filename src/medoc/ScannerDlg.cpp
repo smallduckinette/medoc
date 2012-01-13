@@ -59,17 +59,22 @@ ScannerDlg::ScannerDlg(wxWindow * parent):
   int index = 1;
   while(const SANE_Option_Descriptor * description = sane_get_option_descriptor(m_handle, index))
   {
-    if(optionsFactory.isValidOption(description))
+    wxString groupName;
+    if(optionsFactory.isGroup(description, groupName))
     {
-      m_options.push_back(optionsFactory.create(this, m_handle, index, description));
+      m_options.push_back(std::make_pair(groupName, OptionsCollT()));
+    }
+    else if(optionsFactory.isValidOption(description))
+    {
+      if(m_options.empty())
+      {
+        m_options.push_back(std::make_pair(_(""), OptionsCollT()));
+      }
+      m_options.back().second.push_back(optionsFactory.create(this, m_handle, index, description));
     }
     ++index;
   }
   
-  wxGridSizer * gridSizer = new wxGridSizer(2);
-  std::for_each(m_options.begin(),
-                m_options.end(),
-                std::bind(&ScannerOption::append, std::placeholders::_1, gridSizer));
   wxBoxSizer * hbox = new wxBoxSizer(wxHORIZONTAL);
   hbox->Add(new wxButton(this, ID_BUTTON_SCAN_MANY, _T("Scan many")),
             1, 
@@ -87,7 +92,19 @@ ScannerDlg::ScannerDlg(wxWindow * parent):
   m_gauge = new wxGauge(this, wxID_ANY, 100);
   
   wxBoxSizer * vbox = new wxBoxSizer(wxVERTICAL);
-  vbox->Add(gridSizer, 1, wxEXPAND | wxALL, 7);
+
+  for(auto optionList : m_options)
+  {
+    wxGridSizer * gridSizer = new wxGridSizer(2);
+    std::for_each(optionList.second.begin(),
+                  optionList.second.end(),
+                  std::bind(&ScannerOption::append, std::placeholders::_1, gridSizer));
+    
+    wxStaticBoxSizer * staticSizer = new wxStaticBoxSizer(wxVERTICAL, this, optionList.first);
+    staticSizer->Add(gridSizer, 0, wxEXPAND);
+    vbox->Add(staticSizer, 0, wxEXPAND | wxBOTTOM | wxRIGHT | wxLEFT, 7);
+  }
+
   vbox->Add(m_gauge, 0, wxEXPAND | wxBOTTOM | wxRIGHT | wxLEFT, 7);
   vbox->Add(hbox, 0, wxEXPAND | wxBOTTOM | wxRIGHT | wxLEFT, 7);
   
@@ -118,9 +135,12 @@ void ScannerDlg::onScanSingle(wxCommandEvent &)
 
 void ScannerDlg::onScan(bool many)
 {
-  for(auto option : m_options)
+  for(auto optionList : m_options)
   {
-    option->setOption();
+    for(auto option : optionList.second)
+    {
+      option->setOption();
+    }
   }
 
   int imageNb = 0;

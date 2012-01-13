@@ -52,8 +52,11 @@ private:
   SANE_Handle m_handle;
   std::vector<wxImage> m_images;
   
-  std::vector<std::shared_ptr<ScannerOption> > m_options;
-
+  typedef std::shared_ptr<ScannerOption> ScannerOptionPtr;
+  typedef std::vector<ScannerOptionPtr> OptionsCollT;
+  
+  std::vector<std::pair<wxString, OptionsCollT> > m_options;
+  
   wxGauge * m_gauge;
 };
 

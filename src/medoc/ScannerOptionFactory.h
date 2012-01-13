@@ -30,6 +30,7 @@ public:
                                         int index,
                                         const SANE_Option_Descriptor * descriptor) const;
   bool isValidOption(const SANE_Option_Descriptor * descriptor) const;
+  bool isGroup(const SANE_Option_Descriptor * descriptor, wxString & groupName);
 };
 
 #endif

@@ -87,3 +87,16 @@ bool ScannerOptionFactory::isValidOption(const SANE_Option_Descriptor * descript
 {
   return(descriptor->name);
 }
+
+bool ScannerOptionFactory::isGroup(const SANE_Option_Descriptor * descriptor, wxString & groupName)
+{
+  if(descriptor->type == SANE_TYPE_GROUP)
+  {
+    groupName = wxString(descriptor->title, wxConvUTF8);
+    return true;
+  }
+  else
+  {
+    return false;
+  }
+}
