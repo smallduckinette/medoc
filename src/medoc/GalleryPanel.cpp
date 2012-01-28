@@ -83,6 +83,15 @@ void GalleryPanel::downSelection()
   moveSelection(m_bitmaps.rbegin(), m_bitmaps.rend());
 }
 
+void GalleryPanel::eraseSelection()
+{
+  m_bitmaps.erase(std::remove_if(m_bitmaps.begin(), 
+                                 m_bitmaps.end(),
+                                 [](const std::shared_ptr<GalleryItem> & item) { return item->isSelected(); }),
+                  m_bitmaps.end());
+  Refresh();
+}
+
 void GalleryPanel::OnDraw(wxDC & dc)
 {
   wxBrush backgroundBrush = dc.GetBackground();

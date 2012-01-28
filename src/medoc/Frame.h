@@ -35,6 +35,7 @@ protected:
       ID_FILE_QUIT,
       ID_GALLERY_UP,
       ID_GALLERY_DOWN,
+      ID_GALLERY_ERASE,
       ID_IMPORT_FILE,
       ID_IMPORT_DEVICE,
       ID_IMPORT_DEFAULT_DEVICE,
@@ -52,6 +53,7 @@ protected:
   void onQuit(wxCommandEvent &);
   void onGalleryUp(wxCommandEvent &);
   void onGalleryDown(wxCommandEvent &);
+  void onGalleryErase(wxCommandEvent &);
   void onImportFile(wxCommandEvent &);
   void onImportDevice(wxCommandEvent &);
   void onImportSetDefaultDevice(wxCommandEvent &);

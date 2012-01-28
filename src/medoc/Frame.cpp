@@ -33,6 +33,7 @@ BEGIN_EVENT_TABLE(Frame, wxFrame)
   EVT_MENU(ID_FILE_QUIT, Frame::onQuit)
   EVT_MENU(ID_GALLERY_UP, Frame::onGalleryUp)
   EVT_MENU(ID_GALLERY_DOWN, Frame::onGalleryDown)
+  EVT_MENU(ID_GALLERY_ERASE, Frame::onGalleryErase)
   EVT_MENU(ID_IMPORT_FILE, Frame::onImportFile)
   EVT_MENU(ID_IMPORT_DEVICE, Frame::onImportDevice)
   EVT_MENU(ID_IMPORT_DEFAULT_DEVICE, Frame::onImportSetDefaultDevice)
@@ -64,6 +65,7 @@ Frame::Frame():
   wxMenu * menuGallery = new wxMenu;
   menuGallery->Append(ID_GALLERY_UP, _("Bring selection &up"));
   menuGallery->Append(ID_GALLERY_DOWN, _("Bring selection &down"));
+  menuGallery->Append(ID_GALLERY_ERASE, _("E&rase selection"));
   
   wxMenu * menuImport = new wxMenu;
   menuImport->Append(ID_IMPORT_FILE, _("From &file..."));
@@ -125,6 +127,12 @@ void Frame::onGalleryUp(wxCommandEvent &)
 void Frame::onGalleryDown(wxCommandEvent &)
 {
   m_galleryPanel->downSelection();
+}
+
+void Frame::onGalleryErase(wxCommandEvent &)
+{
+  m_galleryPanel->eraseSelection();
+  m_imagePanel->clear();
 }
 
 void Frame::onImportFile(wxCommandEvent &)

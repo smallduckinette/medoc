@@ -35,6 +35,7 @@ public:
   
   void upSelection();
   void downSelection();
+  void eraseSelection();
   
 protected:
   void OnDraw(wxDC & dc);
