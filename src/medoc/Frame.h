@@ -37,6 +37,7 @@ protected:
       ID_GALLERY_DOWN,
       ID_IMPORT_FILE,
       ID_IMPORT_DEVICE,
+      ID_IMPORT_DEFAULT_DEVICE,
       ID_EXPORT_FILE,
       ID_EXPORT_DB,
       ID_IMAGE_LIST,
@@ -53,6 +54,7 @@ protected:
   void onGalleryDown(wxCommandEvent &);
   void onImportFile(wxCommandEvent &);
   void onImportDevice(wxCommandEvent &);
+  void onImportSetDefaultDevice(wxCommandEvent &);
   void onExportFile(wxCommandEvent &);
   void onExportDb(wxCommandEvent &);
   void onZoomIn(wxCommandEvent &);

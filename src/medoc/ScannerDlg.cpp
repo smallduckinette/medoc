@@ -20,6 +20,7 @@
 #include <wx/progdlg.h>
 #include "ScannerOptionFactory.h"
 #include "ScannerOption.h"
+#include "MedocConfig.h"
 
 BEGIN_EVENT_TABLE(ScannerDlg, wxDialog)
   EVT_BUTTON(ID_BUTTON_SCAN_MANY, ScannerDlg::onScanMany)
@@ -44,16 +45,37 @@ ScannerDlg::ScannerDlg(wxWindow * parent):
   SANE_Int version_code;  
   checkStatus(sane_init(&version_code, nullptr));
   
-  const SANE_Device ** device_list;
-  checkStatus(sane_get_devices(&device_list, SANE_FALSE));
-  if(!*device_list)
+  const SANE_Device ** deviceList;
+  checkStatus(sane_get_devices(&deviceList, SANE_FALSE));
+  
+  MedocConfig config;
+  wxString defaultDeviceName = config.getDefaultDevice();
+  const SANE_Device * firstDevice = NULL;
+  const SANE_Device * defaultDevice = NULL;
+  
+  while(*deviceList)
+  {
+    if(!firstDevice)
+    {
+      firstDevice = *deviceList;
+    }
+    if(wxString((*deviceList)->name, wxConvUTF8) == defaultDeviceName)
+    {
+      defaultDevice = *deviceList;
+    }
+    ++deviceList;
+  }
+  
+  const SANE_Device * chosenDevice = defaultDevice ? defaultDevice : firstDevice;
+  
+  if(!chosenDevice)
   {
     throw std::runtime_error("No devices found");
   }
   
-  SetTitle(_("Import from device ") + wxString((*device_list)->model, wxConvUTF8));
+  SetTitle(_("Import from device ") + wxString(chosenDevice->model, wxConvUTF8));
   
-  checkStatus(sane_open((*device_list)->name, &m_handle));
+  checkStatus(sane_open(chosenDevice->name, &m_handle));
   
   ScannerOptionFactory optionsFactory;
   int index = 1;

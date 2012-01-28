@@ -24,6 +24,7 @@
 #include "OptionsDlg.h"
 #include "PdfImageHandler.h"
 #include "MedocConfig.h"
+#include "DefaultDeviceDlg.h"
 
 
 BEGIN_EVENT_TABLE(Frame, wxFrame)
@@ -34,6 +35,7 @@ BEGIN_EVENT_TABLE(Frame, wxFrame)
   EVT_MENU(ID_GALLERY_DOWN, Frame::onGalleryDown)
   EVT_MENU(ID_IMPORT_FILE, Frame::onImportFile)
   EVT_MENU(ID_IMPORT_DEVICE, Frame::onImportDevice)
+  EVT_MENU(ID_IMPORT_DEFAULT_DEVICE, Frame::onImportSetDefaultDevice)
   EVT_MENU(ID_EXPORT_DB, Frame::onExportDb)
   EVT_MENU(ID_VIEW_ZOOMIN, Frame::onZoomIn)
   EVT_MENU(ID_VIEW_ZOOMOUT, Frame::onZoomOut)
@@ -66,6 +68,8 @@ Frame::Frame():
   wxMenu * menuImport = new wxMenu;
   menuImport->Append(ID_IMPORT_FILE, _("From &file..."));
   menuImport->Append(ID_IMPORT_DEVICE, _("From &device..."));
+  menuImport->AppendSeparator();
+  menuImport->Append(ID_IMPORT_DEFAULT_DEVICE, _("&Set default device..."));
   
   wxMenu * menuExport = new wxMenu;
   menuExport->Append(ID_EXPORT_FILE, _("To &file..."));
@@ -175,6 +179,12 @@ void Frame::onImportDevice(wxCommandEvent &)
     message.ShowModal();
   }
   Layout();
+}
+
+void Frame::onImportSetDefaultDevice(wxCommandEvent &)
+{
+  DefaultDeviceDlg defaultDeviceDlg(this);
+  defaultDeviceDlg.ShowModal();
 }
 
 void Frame::onExportDb(wxCommandEvent &)

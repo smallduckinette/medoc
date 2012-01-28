@@ -26,6 +26,7 @@ namespace
   wxString dbPassword(_("DbPassword"));
   wxString ocrEnabled(_("OcrEnabled"));
   wxString tesseractDataPath(_("TesseractDataPath"));
+  wxString defaultDevice(_("DefaultDevice"));
 }
 
 
@@ -153,4 +154,14 @@ void MedocConfig::setLanguages(const std::vector<Language> & languages)
     m_config.Write(key + _T("/Tesseract"), item.m_tesseractLanguage);
     m_config.Write(key + _T("/Postgres"), item.m_postgresLanguage);
   }
+}
+
+wxString MedocConfig::getDefaultDevice()
+{
+  return m_config.Read(defaultDevice, _(""));
+}
+
+void MedocConfig::setDefaultDevice(const wxString & device)
+{
+  m_config.Write(defaultDevice, device);
 }

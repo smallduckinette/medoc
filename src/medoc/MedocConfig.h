@@ -60,6 +60,10 @@ public:
 
   std::vector<Language> getLanguages();
   void setLanguages(const std::vector<Language> & languages);
+
+  // Default device
+  wxString getDefaultDevice();
+  void setDefaultDevice(const wxString & device);
   
 private:
   wxConfig m_config;
