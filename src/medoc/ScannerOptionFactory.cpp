@@ -22,6 +22,7 @@ std::shared_ptr<ScannerOption>
 ScannerOptionFactory::create(wxWindow * wxWindow,
                              const SANE_Handle & handle,
                              int index,
+                             const wxString & deviceName,
                              const SANE_Option_Descriptor * descriptor) const
 {
   assert(isValidOption(descriptor));
@@ -33,8 +34,9 @@ ScannerOptionFactory::create(wxWindow * wxWindow,
       (new ScannerOptionStringChoice(wxWindow,
                                      handle,
                                      index,
-                                     descriptor->title,
-                                     descriptor->desc,
+                                     deviceName,
+                                     wxString(descriptor->title, wxConvUTF8),
+                                     wxString(descriptor->desc, wxConvUTF8),
                                      descriptor->constraint.string_list));
   }
   else if(descriptor->type == SANE_TYPE_INT || descriptor->type == SANE_TYPE_FIXED)
@@ -45,8 +47,9 @@ ScannerOptionFactory::create(wxWindow * wxWindow,
         (new ScannerOptionIntRange(wxWindow,
                                    handle,
                                    index,
-                                   descriptor->title,
-                                   descriptor->desc,
+                                   deviceName,
+                                   wxString(descriptor->title, wxConvUTF8),
+                                   wxString(descriptor->desc, wxConvUTF8),
                                    descriptor->constraint.range));
     }
     else
@@ -55,8 +58,9 @@ ScannerOptionFactory::create(wxWindow * wxWindow,
         (new ScannerOptionInt(wxWindow,
                               handle,
                               index,
-                              descriptor->title,
-                              descriptor->desc));
+                              deviceName,
+                              wxString(descriptor->title, wxConvUTF8),
+                              wxString(descriptor->desc, wxConvUTF8)));
     }
   }
   else if(descriptor->type == SANE_TYPE_BOOL)
@@ -65,8 +69,9 @@ ScannerOptionFactory::create(wxWindow * wxWindow,
       (new ScannerOptionBool(wxWindow,
                              handle,
                              index,
-                             descriptor->title,
-                             descriptor->desc));
+                             deviceName,
+                             wxString(descriptor->title, wxConvUTF8),
+                             wxString(descriptor->desc, wxConvUTF8)));
   }
   else if(descriptor->type == SANE_TYPE_GROUP || descriptor->type == SANE_TYPE_BUTTON)
   {
@@ -74,8 +79,9 @@ ScannerOptionFactory::create(wxWindow * wxWindow,
       (new ScannerOptionGroup(wxWindow,
                               handle,
                               index,
-                              descriptor->title,
-                              descriptor->desc));
+                              deviceName,
+                              wxString(descriptor->title, wxConvUTF8),
+                              wxString(descriptor->desc, wxConvUTF8)));
   }
   else
   {

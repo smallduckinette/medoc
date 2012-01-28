@@ -27,6 +27,15 @@ namespace
   wxString ocrEnabled(_("OcrEnabled"));
   wxString tesseractDataPath(_("TesseractDataPath"));
   wxString defaultDevice(_("DefaultDevice"));
+  wxString deviceConfig(_("DeviceConfig"));
+
+  wxString createDeviceKey(wxString device,
+                           wxString category)
+  {
+    device.Replace(_("/"), _(""));
+    category.Replace(_("/"), _(""));
+    return deviceConfig + _("/") + device + _("/") + category;
+  }
 }
 
 
@@ -164,4 +173,14 @@ wxString MedocConfig::getDefaultDevice()
 void MedocConfig::setDefaultDevice(const wxString & device)
 {
   m_config.Write(defaultDevice, device);
+}
+
+wxString MedocConfig::getDeviceConfig(const wxString & device, const wxString & category)
+{
+  return m_config.Read(createDeviceKey(device, category), _(""));
+}
+
+void MedocConfig::setDeviceConfig(const wxString & device, const wxString & category, const wxString & value)
+{
+  m_config.Write(createDeviceKey(device, category), value);
 }

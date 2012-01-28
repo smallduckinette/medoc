@@ -65,6 +65,10 @@ public:
   wxString getDefaultDevice();
   void setDefaultDevice(const wxString & device);
   
+  // Device config
+  wxString getDeviceConfig(const wxString & device, const wxString & category);
+  void setDeviceConfig(const wxString & device, const wxString & category, const wxString & value);
+  
 private:
   wxConfig m_config;
 };

@@ -28,6 +28,7 @@ public:
   std::shared_ptr<ScannerOption> create(wxWindow * wxWindow,
                                         const SANE_Handle & handle,
                                         int index,
+                                        const wxString & deviceName,
                                         const SANE_Option_Descriptor * descriptor) const;
   bool isValidOption(const SANE_Option_Descriptor * descriptor) const;
   bool isGroup(const SANE_Option_Descriptor * descriptor, wxString & groupName);

@@ -25,8 +25,9 @@ public:
   ScannerOptionStringChoice(wxWindow * parent,
                             const SANE_Handle & handle,
                             int index,
-                            SANE_String_Const title,
-                            SANE_String_Const desc,
+                            const wxString & deviceName,
+                            const wxString & title,
+                            const wxString & desc,
                             const SANE_String_Const * string_list);
   
   void append(wxSizer * sizer);
@@ -36,6 +37,8 @@ private:
   SANE_Handle m_handle;
   int m_index;
   
+  wxString m_deviceName;
+  wxString m_optionTitle;
   wxStaticText * m_title;
   wxChoice * m_options;
 };
@@ -46,8 +49,9 @@ public:
   ScannerOptionIntRange(wxWindow * parent,
                         const SANE_Handle & handle,
                         int index,
-                        SANE_String_Const title,
-                        SANE_String_Const desc,
+                        const wxString & deviceName,
+                        const wxString & title,
+                        const wxString & desc,
                         const SANE_Range * range);
 
   void append(wxSizer * sizer);
@@ -60,6 +64,8 @@ private:
   int m_max;
   int m_quant;
   
+  wxString m_deviceName;
+  wxString m_optionTitle;
   wxStaticText * m_title;
   wxTextCtrl * m_input;
 };
@@ -70,8 +76,9 @@ public:
   ScannerOptionInt(wxWindow * parent,
                    const SANE_Handle & handle,
                    int index,
-                   SANE_String_Const title,
-                   SANE_String_Const desc);
+                   const wxString & deviceName,
+                   const wxString & title,
+                   const wxString & desc);
   
   void append(wxSizer * sizer);
   void setOption();
@@ -80,6 +87,8 @@ private:
   SANE_Handle m_handle;
   int m_index;
   
+  wxString m_deviceName;
+  wxString m_optionTitle;
   wxStaticText * m_title;
   wxTextCtrl * m_input;
 };
@@ -90,8 +99,9 @@ public:
   ScannerOptionBool(wxWindow * parent,
                     const SANE_Handle & handle,
                     int index,
-                    SANE_String_Const title,
-                    SANE_String_Const desc);
+                    const wxString & deviceName,
+                    const wxString & title,
+                    const wxString & desc);
   
   void append(wxSizer * sizer);
   void setOption();
@@ -100,6 +110,8 @@ private:
   SANE_Handle m_handle;
   int m_index;
 
+  wxString m_deviceName;
+  wxString m_optionTitle;
   wxStaticText * m_title;
   wxCheckBox * m_input;
 };
@@ -110,8 +122,9 @@ public:
   ScannerOptionGroup(wxWindow * parent,
                      const SANE_Handle & handle,
                      int index,
-                     SANE_String_Const title,
-                     SANE_String_Const desc);
+                     const wxString & deviceName,
+                     const wxString & title,
+                     const wxString & desc);
   
   void append(wxSizer * sizer);
   void setOption();
@@ -120,6 +133,8 @@ private:
   SANE_Handle m_handle;
   int m_index;
 
+  wxString m_deviceName;
+  wxString m_optionTitle;
   wxStaticText * m_title;
   wxStaticText * m_description;
 };

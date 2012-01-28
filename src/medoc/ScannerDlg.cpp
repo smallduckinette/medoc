@@ -73,6 +73,7 @@ ScannerDlg::ScannerDlg(wxWindow * parent):
     throw std::runtime_error("No devices found");
   }
   
+  wxString deviceName(chosenDevice->name, wxConvUTF8);
   SetTitle(_("Import from device ") + wxString(chosenDevice->model, wxConvUTF8));
   
   checkStatus(sane_open(chosenDevice->name, &m_handle));
@@ -92,7 +93,7 @@ ScannerDlg::ScannerDlg(wxWindow * parent):
       {
         m_options.push_back(std::make_pair(_(""), OptionsCollT()));
       }
-      m_options.back().second.push_back(optionsFactory.create(this, m_handle, index, description));
+      m_options.back().second.push_back(optionsFactory.create(this, m_handle, index, deviceName, description));
     }
     ++index;
   }
