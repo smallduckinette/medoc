@@ -19,26 +19,22 @@
 
 #include "MedocConfig.h"
 
-Ocr::Ocr(const wxString & language)
+Ocr::Ocr(const wxString & language):
+  _api(new tesseract::TessBaseAPI)
 {
   MedocConfig config;
-  TessBaseAPI::SimpleInit(config.getTesseractDataPath().mb_str(wxConvUTF8), language.mb_str(wxConvUTF8), false);
-}
-
-Ocr::~Ocr()
-{
-  TessBaseAPI::End();
+  _api->Init(config.getTesseractDataPath().mb_str(wxConvUTF8), language.mb_str(wxConvUTF8));
 }
 
 wxString Ocr::recognize(const wxImage & image) const
 {
-  char * text = TessBaseAPI::TesseractRect(image.GetData(), 
-                                           3,
-                                           3 * image.GetWidth(),
-                                           0,
-                                           0,
-                                           image.GetWidth(),
-                                           image.GetHeight());
+  char * text = _api->TesseractRect(image.GetData(), 
+                                    3,
+                                    3 * image.GetWidth(),
+                                    0,
+                                    0,
+                                    image.GetWidth(),
+                                    image.GetHeight());
   wxString outputText(text, wxConvUTF8);
   delete[] text;
   return outputText;

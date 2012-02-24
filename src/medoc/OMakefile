@@ -1,6 +1,6 @@
 CXXFLAGS += $(shell wx-config --cxxflags) $(shell sane-config --cflags) $(shell Magick++-config --cppflags)
 
-LDFLAGS += $(shell wx-config --libs) $(shell sane-config --ldflags) $(shell sane-config --libs) $(shell Magick++-config --ldflags) $(shell Magick++-config --libs) -lpqxx -ltesseract_full
+LDFLAGS += $(shell wx-config --libs) $(shell sane-config --ldflags) $(shell sane-config --libs) $(shell Magick++-config --ldflags) $(shell Magick++-config --libs) -lpqxx -ltesseract
 
 FILES[] =
 	$(removesuffix $(glob *.cpp))

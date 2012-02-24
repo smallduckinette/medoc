@@ -16,15 +16,23 @@
 #ifndef __MEDOC_OCR_H__
 #define __MEDOC_OCR_H__
 
+#include <memory>
 #include <wx/wx.h>
+
+namespace tesseract
+{
+  class TessBaseAPI;
+}
 
 class Ocr
 {
 public:
   Ocr(const wxString & language);
-  ~Ocr();
 
   wxString recognize(const wxImage & image) const;
+
+private:
+  std::shared_ptr<tesseract::TessBaseAPI> _api;
 };
 
 #endif
