@@ -32,6 +32,8 @@ LoginDlg::LoginDlg(wxWindow * parent):
   vbox->Add(grid, 0, wxEXPAND | wxALL, 7);  
   vbox->Add(CreateStdDialogButtonSizer(wxOK | wxCANCEL), 0, wxEXPAND | wxLEFT | wxRIGHT | wxBOTTOM, 7);
 
+  m_login->SetFocus();
+
   SetSizer(vbox);
   vbox->SetSizeHints(this);
 }

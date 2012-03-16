@@ -25,8 +25,7 @@
 
 
 BEGIN_EVENT_TABLE(ExportDbDlg, wxDialog)
-  EVT_BUTTON(ID_BUTTON_EXPORT, ExportDbDlg::onExport)
-  EVT_BUTTON(ID_BUTTON_CANCEL, ExportDbDlg::onCancel)
+  EVT_BUTTON(wxID_OK, ExportDbDlg::onExport)
 END_EVENT_TABLE()
 
 
@@ -35,8 +34,8 @@ ExportDbDlg::ExportDbDlg(wxWindow * parent,
   wxDialog(parent, wxID_NEW, _("Export to database")),
   m_images(images),
   m_title(new wxTextCtrl(this, wxID_NEW)),
-  m_calendar(new wxCalendarCtrl(this, wxID_NEW)),
-  m_languages(new wxChoice(this, wxID_NEW))
+  m_languages(new wxChoice(this, wxID_NEW)),
+  m_calendar(new wxCalendarCtrl(this, wxID_NEW))
 {
   MedocConfig config;
   for(const MedocConfig::Language & item : config.getLanguages())
@@ -61,11 +60,9 @@ ExportDbDlg::ExportDbDlg(wxWindow * parent,
   wxBoxSizer * vbox = new wxBoxSizer(wxVERTICAL);
   vbox->Add(gbox, 0, wxEXPAND | wxALL, 7);
   vbox->Add(m_calendar, 1, wxEXPAND | wxBOTTOM | wxLEFT | wxRIGHT, 7);
-
-  wxBoxSizer * hbox = new wxBoxSizer(wxHORIZONTAL);
-  hbox->Add(new wxButton(this, ID_BUTTON_EXPORT, _("Export")), 1, wxEXPAND | wxRIGHT, 3);
-  hbox->Add(new wxButton(this, ID_BUTTON_CANCEL, _("Cancel")), 1, wxEXPAND | wxLEFT, 3);
-  vbox->Add(hbox, 0, wxEXPAND | wxLEFT | wxRIGHT | wxBOTTOM, 7);
+  vbox->Add(CreateStdDialogButtonSizer(wxOK | wxCANCEL), 0, wxEXPAND | wxLEFT | wxRIGHT | wxBOTTOM, 7);
+  
+  m_title->SetFocus();
 
   SetSizer(vbox);
   vbox->SetSizeHints(this);
@@ -108,11 +105,6 @@ void ExportDbDlg::onExport(wxCommandEvent &)
     }
     EndModal(wxID_OK);
   }
-}
-
-void ExportDbDlg::onCancel(wxCommandEvent &)
-{
-  EndModal(wxID_CANCEL);
 }
 
 std::vector<MedocDb::File> ExportDbDlg::processImages(const wxString & tesseractLanguage) const

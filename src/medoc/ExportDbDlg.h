@@ -34,7 +34,6 @@ protected:
     };
   
   void onExport(wxCommandEvent &);
-  void onCancel(wxCommandEvent &);
 
   DECLARE_EVENT_TABLE();
   
@@ -47,8 +46,8 @@ private:
   MedocDb m_medocDb;
   
   wxTextCtrl * m_title;
-  wxCalendarCtrl * m_calendar;
   wxChoice * m_languages;
+  wxCalendarCtrl * m_calendar;
 };
 
 #endif
