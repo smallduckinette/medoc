@@ -10,7 +10,13 @@ NATIVE_ENABLED = true
 
 OCAMLPACKS[] =
 	calendar
-	ocsigen
+	eliom
+	eliom.client
+	eliom.server
+	eliom.syntax
+	eliom.syntax.client
+	eliom.syntax.server
+	eliom.syntax.type
 	postgresql
 	threads
 	unix

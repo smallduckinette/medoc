@@ -89,9 +89,7 @@ namespace
     static void prepare(pqxx::connection & dbConn)
     {
       dbConn.prepare
-        ("checkUser", "select * from checkUser($1, $2)")
-        ("text", pqxx::prepare::treat_string)
-        ("text", pqxx::prepare::treat_string);
+        ("checkUser", "select * from checkUser($1, $2)");
     }
 
   private:
@@ -138,17 +136,8 @@ namespace
     
     static void prepare(pqxx::connection & dbConn)
     {
-      dbConn.prepare("createDocument", "select * from createDocument($1, $2, $3)")
-        ("text", pqxx::prepare::treat_string)
-        ("date", pqxx::prepare::treat_string)
-        ("text", pqxx::prepare::treat_string);
-      dbConn.prepare("addFile", "select * from addFile($1, $2, $3, $4, $5, $6)")
-        ("integer", pqxx::prepare::treat_direct)
-        ("text", pqxx::prepare::treat_string)
-        ("regconfig", pqxx::prepare::treat_string)
-        ("bytea", pqxx::prepare::treat_binary)
-        ("bytea", pqxx::prepare::treat_binary)
-        ("text", pqxx::prepare::treat_string);
+      dbConn.prepare("createDocument", "select * from createDocument($1, $2, $3)");
+      dbConn.prepare("addFile", "select * from addFile($1, $2, $3, $4, $5, $6)");
     }
 
   private:

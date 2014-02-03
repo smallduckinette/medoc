@@ -16,11 +16,6 @@
 *)
 
 open Lwt
-open XHTML.M
-open Eliom_services
-open Eliom_parameters
-open Eliom_sessions
-open Eliom_predefmod.Xhtml
 open Common
 
 module ThumbProps = 
@@ -65,8 +60,8 @@ let get_file dbPool fileid password =
     (fun dbConn -> Postgresql.unescape_bytea (FileRequest.single_request dbConn prerr_endline (fileid, password)))
 
       
-let medoc_thumb = Eliom_services.new_service ["thumb"] (int "fileid") ()
-let medoc_file = Eliom_services.new_service ["file"] (int "fileid") ()
+let medoc_thumb = Eliom_service.service ["thumb"] (int "fileid") ()
+let medoc_file = Eliom_service.service ["file"] (int "fileid") ()
   
 let get_key sp =
   match Eliom_sessions.get_volatile_session_data session_table sp () with

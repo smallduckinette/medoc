@@ -49,6 +49,6 @@ let gocr file =
       Buffer.contents buffer
 
 let process dbPool docid file = 
-  prerr_endline ("Processing " ^ (Eliom_sessions.get_original_filename file));
+  prerr_endline ("Processing " ^ (Eliom_request_info.get_original_filename file));
   
 
