@@ -17,6 +17,7 @@
 
 open Lwt
 open Common
+open Eliom_parameter
 
 module ThumbProps = 
 struct
@@ -64,15 +65,15 @@ let medoc_thumb = Eliom_service.service ["thumb"] (int "fileid") ()
 let medoc_file = Eliom_service.service ["file"] (int "fileid") ()
   
 let get_key sp =
-  match Eliom_sessions.get_volatile_session_data session_table sp () with
-      Eliom_sessions.Data (_, key) -> key
-    | _ -> raise Not_found
-      
-let _ = 
-  Eliom_predefmod.Streamlist.register medoc_thumb
-    (fun sp fileid () -> get_thumb Common.dbPool fileid (get_key sp) >>= fun image -> return ([fun () -> return (Ocsigen_stream.of_string image)], "image/png"))
+  match (Eliom_reference.Volatile.get Services.login_info) with
+    Some (_, key) -> key
+  | _ -> raise Not_found
     
 let _ = 
-  Eliom_predefmod.Streamlist.register medoc_file
-    (fun sp fileid () -> get_file Common.dbPool fileid (get_key sp) >>= fun image -> return ([fun () -> return (Ocsigen_stream.of_string image)], "image/jpg"))
+  Eliom_registration.Streamlist.register medoc_thumb
+    (fun fileid () -> get_thumb Common.dbPool fileid (get_key ()) >>= fun image -> return ([fun () -> return (Ocsigen_stream.of_string image)], "image/png"))
+    
+let _ = 
+  Eliom_registration.Streamlist.register medoc_file
+    (fun fileid () -> get_file Common.dbPool fileid (get_key ()) >>= fun image -> return ([fun () -> return (Ocsigen_stream.of_string image)], "image/jpg"))
     

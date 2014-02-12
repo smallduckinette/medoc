@@ -15,11 +15,16 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *)
 
-let medoc_empty = Eliom_service.service ["latest"] unit ()
-let medoc_search = Eliom_service.new_service ["search"] (string "term") ()
-let medoc_view = Eliom_service.new_service ["view"] (int "docid") ()
-let medoc_view_tag = Eliom_service.new_service ["tag"] (string "tag") ()
-let medoc_login = Eliom_service.new_post_service ~fallback:medoc_empty ~post_params:(string "login" ** string "password") ()
-let medoc_delete_doc = Eliom_service.new_service ["delete"](int "docId") ()
-let medoc_delete_tag = Eliom_service.new_service ["deleteTag"](int "docId" ** string "tag") ()
-let medoc_add_tag = Eliom_service.new_service ["addTag"](int "docId" ** string "tag") ()
+open Eliom_parameter
+  
+let medoc_empty = Eliom_service.service ~path:["latest"] ~get_params:unit ()
+let medoc_search = Eliom_service.service  ~path:["search"] ~get_params:(string "term") ()
+let medoc_view = Eliom_service.service  ~path:["view"] ~get_params:(int "docid") ()
+let medoc_view_tag = Eliom_service.service ["tag"] (string "tag") ()
+let medoc_login = Eliom_service.post_service ~fallback:medoc_empty ~post_params:(string "login" ** string "password") ()
+let medoc_delete_doc = Eliom_service.service ~path:["delete"] ~get_params:(int "docId") ()
+let medoc_delete_tag = Eliom_service.service ~path:["deleteTag"] ~get_params:(int "docId" ** string "tag") ()
+let medoc_add_tag = Eliom_service.service ~path:["addTag"] ~get_params:(int "docId" ** string "tag") ()
+  
+let login_info = Eliom_reference.Volatile.eref Eliom_common.default_session_scope (None:((string * string) option))
+  

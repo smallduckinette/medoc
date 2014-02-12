@@ -16,10 +16,8 @@ div.mainframe
 {
     float:right;
     background-color:#b0c4de;
-    -moz-border-radius-bottomleft:10px;
-    -moz-border-radius-bottomright:10px;
-    -webkit-border-bottom-left-radius:10px;
-    -webkit-border-bottom-right-radius:10px;
+    border-radius-bottomleft:10px;
+    border-radius-bottomright:10px;
     border-left: 1px solid #ff0000;
     border-right: 1px solid #ff0000;
     border-bottom: 1px solid #ff0000;
@@ -38,15 +36,13 @@ div.header
 div.zone
 {
     background-color:#b0c4de;
-    -moz-border-radius:10px;
-    -webkit-border-radius:10px;
+    border-radius:10px;
     border: 1px solid #ff0000;    
 }
 
 div.subzone
 {
-    -moz-border-radius:10px;
-    -webkit-border-radius:10px;
+    border-radius:10px;
     border: 1px solid #ff0000;    
     margin:5px;
     padding:5px;
@@ -75,8 +71,7 @@ li
 
 a.menu
 {
-    -moz-border-radius:10px;
-    -webkit-border-radius:10px;
+    border-radius:10px;
     border: 1px solid #ff0000;
     width:180px;
     clear:both;
@@ -109,8 +104,7 @@ a.tag:hover
 
 a.minitag
 {
-    -moz-border-radius:10px;
-    -webkit-border-radius:10px;
+    border-radius:10px;
     border: 1px solid #ff0000;
     width:180px;
     padding: 5px;

@@ -11,7 +11,6 @@ NATIVE_ENABLED = true
 OCAMLPACKS[] =
 	calendar
 	eliom
-	eliom.client
 	eliom.server
 	eliom.syntax
 	eliom.syntax.client
