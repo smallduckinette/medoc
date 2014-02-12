@@ -128,8 +128,8 @@ namespace
           (documentId)
           (file.m_contents)
           (m_language)
-          (file.m_thumb)
-          (file.m_image)
+          (pqxx::binarystring(file.m_thumb))
+          (pqxx::binarystring(file.m_image))
           (m_password).exec();
       }
     }
