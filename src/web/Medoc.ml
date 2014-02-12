@@ -56,9 +56,9 @@ let get_tags_for_document tagType service tag_to_service sp docid =
     [] -> pcdata ""
   | t::q -> 
     ul 
-      ((li [a ~a:[a_class ["minitag"]] ~service [pcdata t] (tag_to_service t)])::
+      ((li [a ~a:[a_class ["minitag"]] ~service [pcdata (t ^ " ")] (tag_to_service t)])::
           (List.map 
-             (fun t -> li [a ~a:[a_class ["minitag"]] ~service [pcdata t] (tag_to_service t)]) 
+             (fun t -> li [a ~a:[a_class ["minitag"]] ~service [pcdata (t ^ " ")] (tag_to_service t)]) 
              q))
       
       
