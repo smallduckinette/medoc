@@ -17,6 +17,7 @@
 
 #include <vector>
 #include <algorithm>
+#include <functional>
 
 #include "LanguageDlg.h"
 #include "MedocConfig.h"

@@ -61,8 +61,8 @@ let get_file dbPool fileid password =
     (fun dbConn -> Postgresql.unescape_bytea (FileRequest.single_request dbConn prerr_endline (fileid, password)))
 
       
-let medoc_thumb = Eliom_service.service ["thumb"] (int "fileid") ()
-let medoc_file = Eliom_service.service ["file"] (int "fileid") ()
+let medoc_thumb = Eliom_service.App.service ["thumb"] (int "fileid") ()
+let medoc_file = Eliom_service.App.service ["file"] (int "fileid") ()
   
 let get_key sp =
   match (Eliom_reference.Volatile.get Services.login_info) with
