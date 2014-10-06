@@ -43,7 +43,7 @@ LanguageOptionsPanel::LanguageOptionsPanel(wxWindow * parent):
   m_languages->InsertColumn(1, _T("Tesseract"));
   m_languages->InsertColumn(2, _T("Postgresql"));
   
-  wxGridSizer * grid = new wxGridSizer(2, 3);
+  wxGridSizer * grid = new wxGridSizer(2, 3, 3);
   grid->Add(new wxStaticText(this, wxID_NEW, _("Enable OCR")), 0, wxALIGN_CENTER_VERTICAL);
   grid->Add(m_isOcrEnabled, 0, wxEXPAND);
   grid->Add(new wxStaticText(this, wxID_NEW, _("Tesseract data path")), 0, wxALIGN_CENTER_VERTICAL);

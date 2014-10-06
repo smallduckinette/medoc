@@ -47,7 +47,7 @@ ExportDbDlg::ExportDbDlg(wxWindow * parent,
     m_languages->SetSelection(0);
   }
   
-  wxGridSizer * gbox = new wxGridSizer(2, 7);
+  wxGridSizer * gbox = new wxGridSizer(2, 7, 7);
   gbox->Add(new wxStaticText(this, wxID_NEW, _("Title")),
             0,
             wxALIGN_CENTER_VERTICAL);

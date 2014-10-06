@@ -29,7 +29,7 @@ PdfOptionsPanel::PdfOptionsPanel(wxWindow * parent):
                        1000,
                        150))
 {
-  wxGridSizer * grid = new wxGridSizer(2, 3);
+  wxGridSizer * grid = new wxGridSizer(2, 3, 3);
   grid->Add(new wxStaticText(this, wxID_NEW, _("Import DBI")), 0, wxALIGN_CENTER_VERTICAL);
   grid->Add(m_dpi, 0, wxEXPAND);  
   

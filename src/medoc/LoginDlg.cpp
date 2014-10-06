@@ -22,7 +22,7 @@ LoginDlg::LoginDlg(wxWindow * parent):
                             wxDefaultSize,
                             wxTE_PASSWORD))
 {
-  wxGridSizer * grid = new wxGridSizer(2, 3);
+  wxGridSizer * grid = new wxGridSizer(2, 3, 3);
   grid->Add(new wxStaticText(this, wxID_NEW, _("Login")), 0, wxALIGN_CENTER_VERTICAL);
   grid->Add(m_login, 0, wxEXPAND);    
   grid->Add(new wxStaticText(this, wxID_NEW, _("Password")), 0, wxALIGN_CENTER_VERTICAL);

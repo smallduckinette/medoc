@@ -37,7 +37,7 @@ namespace
                                                          blob.length(), &exceptionInfo );
     MagickCore::DestroyImageInfo(imageInfo);
     Magick::insertImages( sequence, images );
-    Magick::throwException( exceptionInfo );
+    Magick::throwException( &exceptionInfo );
     MagickCore::DestroyExceptionInfo( &exceptionInfo );
   }
 

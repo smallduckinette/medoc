@@ -33,7 +33,7 @@ DatabaseOptionsPanel::DatabaseOptionsPanel(wxWindow * parent):
   m_login(new wxTextCtrl(this, wxID_NEW)),
   m_password(new wxTextCtrl(this, wxID_NEW, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PASSWORD))
 {
-  wxGridSizer * grid = new wxGridSizer(2, 3);
+  wxGridSizer * grid = new wxGridSizer(2, 3, 3);
   grid->Add(new wxStaticText(this, wxID_NEW, _("Db host")), 0, wxALIGN_CENTER_VERTICAL);
   grid->Add(m_host, 0, wxEXPAND);
   grid->Add(new wxStaticText(this, wxID_NEW, _("Db port")), 0, wxALIGN_CENTER_VERTICAL);

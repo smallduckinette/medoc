@@ -18,6 +18,7 @@
 #define __MEDOC_LANGUAGEOPTIONSPANEL_H__
 
 #include <wx/wx.h>
+#include <wx/listctrl.h>
 
 class LanguageOptionsPanel : public wxPanel
 {

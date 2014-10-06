@@ -24,7 +24,7 @@ LanguageDlg::LanguageDlg(wxWindow * parent):
   m_tesseractLanguage(new wxTextCtrl(this, wxID_ANY, wxEmptyString)),
   m_postgresLanguage(new wxTextCtrl(this, wxID_ANY, wxEmptyString))
 {
-  wxGridSizer * grid = new wxGridSizer(2, 3);
+  wxGridSizer * grid = new wxGridSizer(2, 3, 3);
   grid->Add(new wxStaticText(this, wxID_NEW, _("Language")), 0, wxALIGN_CENTER_VERTICAL);
   grid->Add(m_language, 0, wxEXPAND);    
   grid->Add(new wxStaticText(this, wxID_NEW, _("Tesseract language")), 0, wxALIGN_CENTER_VERTICAL);
