@@ -67,8 +67,11 @@ void ImagePanel::resetZoom()
 
 void ImagePanel::OnDraw(wxDC & dc)
 {
-  dc.DrawBitmap(m_bitmap, 0, 0, false);
-  SetVirtualSize(m_bitmap.GetWidth(), m_image.GetHeight());
+  if(m_bitmap.IsOk())
+  {
+    dc.DrawBitmap(m_bitmap, 0, 0, false);
+    SetVirtualSize(m_bitmap.GetWidth(), m_image.GetHeight());
+  }
 }
 
 void ImagePanel::setBitmap()
