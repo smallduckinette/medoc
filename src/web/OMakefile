@@ -16,6 +16,7 @@ OCAMLPACKS[] =
 	eliom.syntax.client
 	eliom.syntax.server
 	eliom.syntax.type
+	lwt
 	postgresql
 	threads
 	unix

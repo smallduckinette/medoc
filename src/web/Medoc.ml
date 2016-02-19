@@ -74,10 +74,13 @@ let data_to_rows sp data =
   List.map (data_to_row sp) data
     
 let title_row = 
-  tr [th [pcdata "Date"]; th [pcdata "Date"]; th [pcdata "Pages"]]
+  tr [th [pcdata "Title"]; th [pcdata "Date"]; th [pcdata "Pages"]]
     
 let search_table data sp = 
-  table title_row (data_to_rows sp data)
+  table
+    ~thead:(thead[title_row])
+    (data_to_rows sp data)
+  
     
 let custom_tag sp docid = 
   get_form medoc_add_tag (
@@ -215,7 +218,7 @@ let medoc_main_page =
     );
     let session_data = 1 in
     let page = 
-      Lwt_util.fold_left 
+      Lwt_list.fold_left_s
 	(fun acc t -> t >>= 
 	   (fun r -> return (r::acc))) 
 	[] 
